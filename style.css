@@ -1,0 +1,74 @@
+/** fix for portable text rtl changebar */
+.pt-text-block[dir='rtl'] [data-testid='change-bar-wrapper'] {
+    --change-bar-offset: -2px !important;
+}
+
+/** fix for portable text rtl blockquote */
+.pt-text-block[data-style='blockquote'] blockquote[data-testid='text-style--blockquote'] {
+    padding: 0 !important;
+    padding-inline-start: 12px !important;
+}
+.pt-text-block[data-style='blockquote'] blockquote[data-testid='text-style--blockquote']::before {
+    left: unset !important;
+    inset-inline-start: 0 !important;
+}
+.makana-pt-style-select-blockquote {
+    position: relative;
+    padding-inline-start: 12px;
+}
+.makana-pt-style-select-blockquote::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0px;
+    top: -4px;
+    bottom: -4px;
+    width: 3px;
+    background: var(--card-border-color);
+}
+
+/** fix for portable text rtl lists */
+.pt-list-item.pt-list-item-level-1 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 1) !important;
+}
+.pt-list-item.pt-list-item-level-2 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 2) !important;
+}
+.pt-list-item.pt-list-item-level-3 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 3) !important;
+}
+.pt-list-item.pt-list-item-level-4 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 4) !important;
+}
+.pt-list-item.pt-list-item-level-5 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 5) !important;
+}
+.pt-list-item.pt-list-item-level-6 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 6) !important;
+}
+.pt-list-item.pt-list-item-level-7 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 7) !important;
+}
+.pt-list-item.pt-list-item-level-8 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 8) !important;
+}
+.pt-list-item.pt-list-item-level-9 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 9) !important;
+}
+.pt-list-item.pt-list-item-level-10 [data-testid='text-block__text'][data-list-item] > *:first-child {
+    padding: 0 !important;
+    padding-inline-start: calc(32px * 10) !important;
+}
+.pt-list-item [data-list-prefix] {
+    margin-left: 0 !important;
+    margin-inline-start: -4.5rem !important;
+    text-align: end !important;
+}
