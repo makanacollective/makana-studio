@@ -1,8 +1,8 @@
-import { CalendarIcon } from "@sanity/icons";
-import { defineField, defineType, SortOrderingItem } from "sanity";
-import { DEFAULT_LANGUAGE, renderLocalisedString, SUPPORTED_LANGUAGES } from "../lib/languageUtils";
-import { createLocalisedSlug } from "./localisedSlug";
-import { DATE_FORMAT, renderIsoDate } from "../lib/dateUtils";
+import { CalendarIcon } from '@sanity/icons';
+import { defineField, defineType, SortOrderingItem } from 'sanity';
+import { DEFAULT_LANGUAGE, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
+import { createLocalisedSlug } from './localisedSlug';
+import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
 
 export const HAPPENING_ICON = CalendarIcon;
 

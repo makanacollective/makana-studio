@@ -1,6 +1,6 @@
-import { defineField, defineType } from "sanity";
-import { SUPPORTED_LANGUAGES } from "../lib/languageUtils";
-import { RTLCompatibleInput } from "../components/RTLCompatibleInput";
+import { defineField, defineType } from 'sanity';
+import { SUPPORTED_LANGUAGES } from '../lib/languageUtils';
+import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
 
 export default defineType({
     name: 'localisedString',

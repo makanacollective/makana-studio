@@ -1,6 +1,6 @@
 import { PlugIcon, StarIcon } from '@sanity/icons';
-import { defineArrayMember, defineField, defineType, SortOrderingItem } from "sanity";
-import { DEFAULT_LANGUAGE, renderLocalisedString, SUPPORTED_LANGUAGES } from "../lib/languageUtils";
+import { defineArrayMember, defineField, defineType, SortOrderingItem } from 'sanity';
+import { DEFAULT_LANGUAGE, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 import { createLocalisedSlug } from './localisedSlug';
 
 export const RESOURCE_LIST_ICON = PlugIcon;

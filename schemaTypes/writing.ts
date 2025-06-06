@@ -97,9 +97,9 @@ export default defineType({
             },
         }),
         defineField({
-            name: "summary",
-            type: "text",
-            title: "Summary",
+            name: 'summary',
+            type: 'text',
+            title: 'Summary',
             rows: 3,
             // TODO description
             // TODO validation

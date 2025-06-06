@@ -81,7 +81,7 @@ export const ComputedReferenceList = (props: InputProps) => {
                                 // eslint-disable-next-line react/jsx-no-bind
                                 onClick={() => handleClick(doc._id, doc._type)}
                                 padding={2}
-                                mode={"bleed"}
+                                mode={'bleed'}
                                 style={{ cursor: 'pointer', }}
                             >
                                 <Preview
