@@ -72,3 +72,8 @@
     margin-inline-start: -4.5rem !important;
     text-align: end !important;
 }
+
+/** misc */
+fieldset[data-testid="fieldset-dateTime"] > div:nth-child(2) > div > div[data-testid="field-timezone"] {
+    grid-column: 1/-1;
+}

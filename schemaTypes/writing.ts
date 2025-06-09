@@ -116,6 +116,7 @@ export default defineType({
             type: 'image',
             title: 'Cover Image',
             // TODO description
+            // TODO validation
             options: {
                 hotspot: {
                     previews: HOTSPOT_PREVIEWS,
@@ -128,6 +129,7 @@ export default defineType({
             type: 'pageBuilder',
             title: 'Content',
             // TODO description
+            // TODO validation
             options: {
                 // documentInternationalization: {
                 //     exclude: true,

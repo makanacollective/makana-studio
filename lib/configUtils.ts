@@ -3,6 +3,16 @@ import { LANGUAGE_FIELD_NAME, SUPPORTED_LANGUAGES } from './languageUtils';
 import { FC, SVGProps } from 'react';
 import { SortOrderingItem } from 'sanity';
 
+export const LOCALISABLE_SCHEMA_TYPES = new Set([
+    'writing',
+    'happening',
+]);
+
+export const SINGLETON_SCHEMA_TYPES = new Set([
+    // TODO about?
+    // TODO homepage?
+]);
+
 const filterMenuItems = (items?: (MenuItem | MenuItemBuilder)[]) => {
     return items?.filter((item) => {
         if (
@@ -77,6 +87,9 @@ export const localisedDocumentList = (
                         || S.documentTypeList(typeName).getDefaultOrdering()
                         || [{ direction: 'asc', field: '_id', }]
                     )
+                    .initialValueTemplates([
+                        S.initialValueTemplateItem(`${typeName}-by-language`, { langId: lang.id })
+                    ])
             );
     });
     return baseListItem.child(S.list().title(title).items(languageItems));
@@ -98,5 +111,3 @@ export const singletonDocument = (
 };
 
 export const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore']);
-
-export const SINGLETON_SCHEMA_TYPES = new Set([]);

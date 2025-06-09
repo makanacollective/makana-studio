@@ -34,7 +34,12 @@ export default defineType({
                 {
                     type: 'writing',
                 },
-                // add types
+                {
+                    type: 'happening',
+                },
+                {
+                    type: 'resourceList',
+                },
             ],
             options: {
                 disableNew: true,

@@ -15,11 +15,12 @@ import pageBuilder from './pageBuilder';
 
 export const schemaTypes = [
     // documents
-    // about,
+    // TODO about,
     form,
     happening,
-    // homepage
-    // project,
+    // TODO homepage,
+    // TODO page?,
+    // TODO project,
     resourceList,
     writing,
     // objects
