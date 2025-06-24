@@ -1,6 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { bodyPortableTextBlock } from './bodyPortableText';
-import { ImageIcon, ImagesIcon, VideoIcon } from '@sanity/icons';
+import { ImageIcon, ImagesIcon, PlayIcon, VideoIcon } from '@sanity/icons';
 import { auxiliaryPortableTextBlock } from './auxiliaryPortableText';
 import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
 import { RTLCompatiblePortableTextEditor } from '../components/RTLCompatiblePortableTextEditor';
@@ -45,6 +45,7 @@ export const createPageBuilder = (
                         of: [
                             defineArrayMember({
                                 type: 'image',
+                                icon: ImageIcon,
                                 options: {
                                     storeOriginalFilename: false,
                                 },
@@ -53,8 +54,7 @@ export const createPageBuilder = (
                                         name: 'altText',
                                         type: 'string',
                                         title: 'Alt Text',
-                                        description: 'Important for accessibility and SEO.',
-                                        // TODO validation
+                                        description: 'Important for accessibility and SEO',
                                         components: {
                                             input: RTLCompatibleInput,
                                         },
@@ -175,7 +175,61 @@ export const createPageBuilder = (
                     },
                 },
             }),
-            // TODO audio block
+            defineArrayMember({
+                name: 'audioBlock',
+                type: 'object',
+                title: 'Audio',
+                icon: PlayIcon,
+                fields: [
+                    defineField({
+                        name: 'file',
+                        type: 'file',
+                        title: 'File',
+                        options: {
+                            accept: 'audio/*',
+                        },
+                    }),
+                    defineField({
+                        name: 'caption',
+                        type: 'array',
+                        title: 'Caption',
+                        // TODO description
+                        // TODO validation
+                        of: [
+                            defineArrayMember({
+                                ...auxiliaryPortableTextBlock,
+                                options: {
+                                    oneLine: true,
+                                },
+                            }),
+                        ],
+                        components: {
+                            // @ts-ignore
+                            input: RTLCompatiblePortableTextEditor,
+                        },
+                        options: {
+                            // @ts-ignore
+                            inputDirection: inputDirection,
+                        },
+                    }),
+                ],
+                preview: {
+                    select: {
+                        originalFilename: 'file.asset.originalFilename',
+                        caption: 'caption',
+                    },
+                    prepare(selection) {
+                        const {
+                            originalFilename,
+                            caption,
+                        } = selection;
+                        return {
+                            title: `Audio: ${FSI}${originalFilename || 'None selected'}${PDI}`,
+                            subtitle: caption ? `${FSI}${renderPortableTextAsPlainText(caption)}${PDI}` : 'No caption',
+                        };
+                    },
+                },
+            }),
             defineArrayMember({
                 name: 'formBlock',
                 type: 'object',
@@ -210,7 +264,7 @@ export const createPageBuilder = (
                             formTitle,
                         } = selection;
                         return {
-                            title: form && form._ref ? `${FSI}Form: ${renderLocalisedString(formTitle)}${PDI}` : 'No form selected',
+                            title: `${FSI}Form: ${form && form._ref ? renderLocalisedString(formTitle) : 'None selected'}${PDI}`,
                         };
                     },
                 },

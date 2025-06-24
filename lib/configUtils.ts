@@ -3,6 +3,25 @@ import { LANGUAGE_FIELD_NAME, SUPPORTED_LANGUAGES } from './languageUtils';
 import { FC, SVGProps } from 'react';
 import { SortOrderingItem } from 'sanity';
 
+
+export const localisedSchemaTypeNames = new Set([
+    'project',
+    'writing',
+]);
+
+export const singletonSchemaTypeNames = new Set([
+    'aboutPage',
+    'homePage',
+    'websiteSettings',
+]);
+
+export const targetableSchemaTypeNames = new Set([
+    'happening',
+    'project',
+    'resource',
+    'writing',
+]);
+
 const filterMenuItems = (menuItems?: (MenuItem | MenuItemBuilder)[]) => {
     return menuItems?.filter((menuItem) => {
         if (
@@ -43,7 +62,7 @@ export const documentList = (
             .defaultOrdering(
                 defaultOrdering
                 || S.documentTypeList(schemaTypeName).getDefaultOrdering()
-                || [{ direction: 'asc', field: '_id', }]
+                || [{ field: '_id', direction: 'asc', }]
             )
     );
 };

@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import { targetableSchemaTypeNames } from '../lib/configUtils';
 
 export const createLink = (
     options: {
@@ -45,20 +46,11 @@ export const createLink = (
                 type: 'reference',
                 title: 'Internal Target',
                 // TODO description
-                to: [
-                    {
-                        type: 'happening',
-                    },
-                    {
-                        type: 'project',
-                    },
-                    {
-                        type: 'resource',
-                    },
-                    {
-                        type: 'writing',
-                    },
-                ],
+                to: Array.from(targetableSchemaTypeNames).map((schemaTypeName) => {
+                    return {
+                        type: schemaTypeName,
+                    };
+                }),
                 options: {
                     disableNew: true,
                 },

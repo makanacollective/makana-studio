@@ -3,6 +3,7 @@ import form from './form';
 import happening from './happening';
 import project from './project';
 import resource from './resource';
+import translationGroup from './translationGroup';
 import writing from './writing';
 // singletons
 import aboutPage from './aboutPage';
@@ -25,6 +26,7 @@ export const schemaTypes = new Set([
     happening,
     project,
     resource,
+    translationGroup,
     writing,
     // singletons
     aboutPage,
@@ -52,15 +54,4 @@ export const schemaTypes = new Set([
     //         },
     //     ],
     // },
-]);
-
-export const localisedSchemaTypeNames = new Set([
-    'project',
-    'writing',
-]);
-
-export const singletonSchemaTypeNames = new Set([
-    'aboutPage',
-    'homePage',
-    'websiteSettings',
 ]);
