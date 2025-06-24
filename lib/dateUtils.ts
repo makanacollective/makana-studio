@@ -1,4 +1,4 @@
-export const DATE_FORMAT = 'DD MMMM YYYY';
+export const DATE_FORMAT = 'DD_MM_YYYY';
 
 export const renderIsoDate = (date: string, {
     mode = 'full',

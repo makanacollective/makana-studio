@@ -1,4 +1,4 @@
-import { BillIcon, BlockContentIcon, CheckmarkIcon, SelectIcon, StarIcon, StringIcon, UnknownIcon } from '@sanity/icons';
+import { BillIcon, BlockContentIcon, HelpCircleIcon, SelectIcon, StringIcon, UlistIcon, UnknownIcon } from '@sanity/icons';
 import { defineArrayMember, defineField, defineType, SortOrderingItem } from 'sanity';
 import { DEFAULT_LANGUAGE, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 
@@ -25,6 +25,7 @@ export default defineType({
             // TODO description
             // TODO validation
         }),
+        // TODO api
         defineField({
             name: 'fields',
             type: 'array',
@@ -44,12 +45,16 @@ export default defineType({
                             // TODO description
                             // TODO validation
                         }),
-                        defineField({
-                            name: 'key',
-                            type: 'string',
-                            title: 'Key',
+                        defineField({ // TODO improve
+                            name: 'uid',
+                            type: 'slug',
+                            title: 'Unique Identifier',
                             // TODO description
                             // TODO validation
+                            options: {
+                                // @ts-ignore
+                                source: (_, context) => context.parent.label?.en || context.parent.label?.ar || undefined,
+                            },
                         }),
                         defineField({
                             name: 'type',
@@ -57,6 +62,7 @@ export default defineType({
                             title: 'Type',
                             // TODO description
                             // TODO validation
+                            initialValue: 'text',
                             options: {
                                 list: [
                                     {
@@ -88,7 +94,7 @@ export default defineType({
                                     name: 'option',
                                     type: 'object',
                                     title: 'Option',
-                                    icon: StarIcon,
+                                    icon: HelpCircleIcon,
                                     fields: [
                                         defineField({
                                             name: 'label',
@@ -126,7 +132,7 @@ export default defineType({
                             const {
                                 label,
                                 type,
-                                options,
+                                options = [],
                             } = selection;
                             return {
                                 title: renderLocalisedString(label),
@@ -140,7 +146,7 @@ export default defineType({
                                     type === 'text' ? StringIcon
                                     : type === 'textarea' ? BlockContentIcon
                                     : type === 'select' ? SelectIcon
-                                    : type === 'checkbox' ? CheckmarkIcon
+                                    : type === 'checkbox' ? UlistIcon
                                     : UnknownIcon,
                             };
                         },

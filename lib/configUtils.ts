@@ -1,32 +1,22 @@
-import { MenuItem, MenuItemBuilder, StructureBuilder } from 'sanity/structure';
+import { Divider, ListItem, ListItemBuilder, MenuItem, MenuItemBuilder, StructureBuilder } from 'sanity/structure';
 import { LANGUAGE_FIELD_NAME, SUPPORTED_LANGUAGES } from './languageUtils';
 import { FC, SVGProps } from 'react';
 import { SortOrderingItem } from 'sanity';
 
-export const LOCALISABLE_SCHEMA_TYPES = new Set([
-    'writing',
-    'happening',
-]);
-
-export const SINGLETON_SCHEMA_TYPES = new Set([
-    // TODO about?
-    // TODO homepage?
-]);
-
-const filterMenuItems = (items?: (MenuItem | MenuItemBuilder)[]) => {
-    return items?.filter((item) => {
+const filterMenuItems = (menuItems?: (MenuItem | MenuItemBuilder)[]) => {
+    return menuItems?.filter((menuItem) => {
         if (
             // @ts-ignore
-            item.spec?.action === 'setSortOrder'
+            menuItem.spec?.action === 'setSortOrder'
             // @ts-ignore
-            && item.spec?.params?.by?.[0]?.field?.startsWith('_')
+            && menuItem.spec?.params?.by?.[0]?.field?.startsWith('_')
         ) { return false; }
         return true;
     }) ?? [];
 };
 
 type DocumentListOptions = {
-    typeName: string;
+    schemaTypeName: string;
     title: string;
     id: string;
     icon?: FC<SVGProps<SVGSVGElement>>;
@@ -38,7 +28,7 @@ export const documentList = (
     options: DocumentListOptions,
 ) => {
     const {
-        typeName,
+        schemaTypeName,
         title,
         id,
         icon,
@@ -47,12 +37,12 @@ export const documentList = (
     let baseListItem = S.listItem().title(title).id(id);
     if (icon) { baseListItem = baseListItem.icon(icon); }
     return baseListItem.child(
-        S.documentTypeList(typeName)
+        S.documentTypeList(schemaTypeName)
             .title(title)
-            .menuItems(filterMenuItems(S.documentTypeList(typeName).getMenuItems()))
+            .menuItems(filterMenuItems(S.documentTypeList(schemaTypeName).getMenuItems()))
             .defaultOrdering(
                 defaultOrdering
-                || S.documentTypeList(typeName).getDefaultOrdering()
+                || S.documentTypeList(schemaTypeName).getDefaultOrdering()
                 || [{ direction: 'asc', field: '_id', }]
             )
     );
@@ -60,14 +50,19 @@ export const documentList = (
 
 export const localisedDocumentList = (
     S: StructureBuilder,
-    options: DocumentListOptions,
+    options: DocumentListOptions & {
+        before?: (ListItemBuilder | ListItem | Divider | any)[];
+        after?: (ListItemBuilder | ListItem | Divider | any)[];
+    },
 ) => {
     const {
-        typeName,
+        schemaTypeName,
         title,
         id,
         icon,
         defaultOrdering,
+        before = [],
+        after = [],
     } = options;
     let baseListItem = S.listItem().title(title).id(id);
     if (icon) { baseListItem = baseListItem.icon(icon); }
@@ -76,38 +71,41 @@ export const localisedDocumentList = (
             .title(`${title} (${lang.title})`)
             .id(lang.id)
             .child(
-                S.documentTypeList(typeName)
+                S.documentTypeList(schemaTypeName)
                     .title(`${title} (${lang.title})`)
-                    .filter(`_type == $typeName && ${LANGUAGE_FIELD_NAME} == $lang`)
-                    .params({ typeName, lang: lang.id })
+                    .filter(`_type == $schemaTypeName && ${LANGUAGE_FIELD_NAME} == $lang`)
+                    .params({ schemaTypeName, lang: lang.id })
                     .apiVersion('2025-05-15')
-                    .menuItems(filterMenuItems(S.documentTypeList(typeName).getMenuItems()))
+                    .menuItems(filterMenuItems(S.documentTypeList(schemaTypeName).getMenuItems()))
                     .defaultOrdering(
                         defaultOrdering
-                        || S.documentTypeList(typeName).getDefaultOrdering()
+                        || S.documentTypeList(schemaTypeName).getDefaultOrdering()
                         || [{ direction: 'asc', field: '_id', }]
                     )
                     .initialValueTemplates([
-                        S.initialValueTemplateItem(`${typeName}-by-language`, { langId: lang.id })
+                        S.initialValueTemplateItem(`${schemaTypeName}-by-language`, { langId: lang.id })
                     ])
             );
     });
-    return baseListItem.child(S.list().title(title).items(languageItems));
+    return baseListItem.child(S.list().title(title).items([...before, ...languageItems, ...after]));
 };
 
 export const singletonDocument = (
     S: StructureBuilder,
-    typeName: string,
-    title: string,
+    options: Pick<DocumentListOptions, 'schemaTypeName' | 'title' | 'icon'>,
 ) => {
-    return S.listItem()
-        .title(title)
-        .id(typeName)
-        .child(
-            S.document()
-                .schemaType(typeName)
-                // .documentId(typeName)
-        );
+    const {
+        schemaTypeName,
+        title,
+        icon,
+    } = options;
+    let baseListItem = S.listItem().title(title).id(schemaTypeName);
+    if (icon) { baseListItem = baseListItem.icon(icon); }
+    return baseListItem.child(
+        S.document()
+            .schemaType(schemaTypeName)
+            .documentId(schemaTypeName)
+    );
 };
 
 export const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore']);

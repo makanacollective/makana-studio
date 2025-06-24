@@ -22,10 +22,15 @@ export const PDI = '\u2069';
 
 export const SEPARATOR = ' \u00B7 ';
 
-export const renderLocalisedString = (localisedString = {}) => {
+export const renderLocalisedString = (
+    localisedString: Record<string, string> = {},
+    maxLength = 100
+): string | undefined => {
     return Object.entries(localisedString ?? {})
         ?.filter(([key, value]) => !key.startsWith('_') && Boolean(value))
-        ?.map(([, value]) => `${FSI}${value}${PDI}`)
+        ?.map(([, value]) => {
+            const truncated = value.length > maxLength ? value.slice(0, maxLength) + '…' : value;
+            return (`${FSI}${truncated}${PDI}`);
+        })
         ?.join(SEPARATOR) || undefined;
-    // TODO truncate strings?
 };

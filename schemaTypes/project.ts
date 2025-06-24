@@ -1,14 +1,14 @@
-import { BookIcon } from '@sanity/icons';
-import { defineField, defineType, SortOrderingItem, } from 'sanity';
+import { StarIcon } from '@sanity/icons';
+import { defineField, defineType, SortOrderingItem } from 'sanity';
 import { FSI, LANGUAGE_FIELD_NAME, PDI } from '../lib/languageUtils';
 import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';
 
-export const WRITING_ICON = BookIcon;
+export const PROJECT_ICON = StarIcon;
 
-export const WRITING_DATE_ORDERING: SortOrderingItem[] = [
+export const PROJECT_DATE_ORDERING: SortOrderingItem[] = [
     {
         field: 'date',
         direction: 'desc',
@@ -20,11 +20,11 @@ export const WRITING_DATE_ORDERING: SortOrderingItem[] = [
 ];
 
 export default defineType({
-    name: 'writing',
+    name: 'project',
     type: 'document',
-    title: 'Writing',
+    title: 'Project',
     // TODO description
-    icon: WRITING_ICON,
+    icon: PROJECT_ICON,
     fields: [
         defineField({
             name: LANGUAGE_FIELD_NAME,
@@ -105,7 +105,7 @@ export default defineType({
         {
             name: 'dateDesc',
             title: 'date',
-            by: WRITING_DATE_ORDERING,
+            by: PROJECT_DATE_ORDERING,
         },
         {
             name: 'titleAsc',
@@ -138,7 +138,7 @@ export default defineType({
             } = selection;
             return {
                 title: title ? `${FSI}${title}${PDI}` : undefined,
-                subtitle: renderIsoDate(date, { mode: 'full', withFallback: true }),
+                subtitle: renderIsoDate(date, { mode: 'yearOnly', withFallback: true }),
                 description: `${FSI}${summary || 'No summary'}${PDI}`,
                 media: mainImage,
             };

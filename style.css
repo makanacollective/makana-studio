@@ -1,9 +1,42 @@
-/** fix for portable text rtl changebar */
-.pt-text-block[dir='rtl'] [data-testid='change-bar-wrapper'] {
+/* rtl patch for portable text editor (see ./components/RTLCompatiblePortableTextEditor.tsx */
+.makana-pte-ltr .pt-text-block,
+.makana-pte-ltr-fullscreen [data-testid='pt-editor'][data-fullscreen='true'] .pt-text-block {
+    direction: ltr !important;
+}
+.makana-pte-rtl .pt-text-block,
+.makana-pte-rtl-fullscreen [data-testid='pt-editor'][data-fullscreen='true'] .pt-text-block {
+    direction: rtl !important;
+}
+.pt-object-block [data-testid='block-preview'] [data-testid='block-preview__header'] {
+    direction: ltr !important;
+}
+.makana-pte-rtl-fullscreen [data-testid='pt-editor'][data-fullscreen='true'] .pt-text-block [data-testid='change-bar-wrapper'] {
     --change-bar-offset: -2px !important;
 }
+.makana-pte-ltr [data-testid='pt-editor'],
+.makana-pte-ltr-fullscreen [data-testid='pt-editor'][data-fullscreen='true'] {
+    direction: ltr !important;
+}
+.makana-pte-rtl [data-testid='pt-editor'],
+.makana-pte-rtl-fullscreen [data-testid='pt-editor'][data-fullscreen='true'] {
+    direction: rtl !important;
+}
+.makana-pte-rtl [data-testid='pt-editor'] [data-testid='pt-editor__toolbar-card'],
+.makana-pte-rtl-fullscreen [data-testid='pt-editor'][data-fullscreen='true'] [data-testid='pt-editor__toolbar-card'] {
+    direction: ltr !important;
+}
 
-/** fix for portable text rtl blockquote */
+/* fix for portable text block previews */
+.pt-object-block [data-testid='block-preview'] [data-testid='block-preview__header'] > :nth-child(2) {
+    padding: 0 !important;
+    padding-inline-start: 0.5rem !important;
+}
+.pt-object-block [data-testid='block-preview'] [data-testid='block-preview__header'] > :nth-child(3) {
+    padding: 0 !important;
+    padding-inline-start: 0.25rem !important;
+}
+
+/* fix for portable text rtl blockquote */
 .pt-text-block[data-style='blockquote'] blockquote[data-testid='text-style--blockquote'] {
     padding: 0 !important;
     padding-inline-start: 12px !important;
@@ -12,21 +45,8 @@
     left: unset !important;
     inset-inline-start: 0 !important;
 }
-.makana-pt-style-select-blockquote {
-    position: relative;
-    padding-inline-start: 12px;
-}
-.makana-pt-style-select-blockquote::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 0px;
-    top: -4px;
-    bottom: -4px;
-    width: 3px;
-    background: var(--card-border-color);
-}
 
-/** fix for portable text rtl lists */
+/* fix for portable text rtl lists */
 .pt-list-item.pt-list-item-level-1 [data-testid='text-block__text'][data-list-item] > *:first-child {
     padding: 0 !important;
     padding-inline-start: calc(32px * 1) !important;
@@ -73,7 +93,10 @@
     text-align: end !important;
 }
 
-/** misc */
-fieldset[data-testid="fieldset-dateTime"] > div:nth-child(2) > div > div[data-testid="field-timezone"] {
-    grid-column: 1/-1;
+/* style change for portable text headings (see ./components/PortableTextHeadingStyle.tsx) */
+.makana-pte-heading,
+.makana-pte-heading strong {
+    font-weight: 700 !important;
+    font-size: 0.9375rem !important;
+    line-height: calc(1.53333);
 }

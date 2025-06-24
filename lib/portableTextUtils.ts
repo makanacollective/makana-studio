@@ -1,9 +1,8 @@
-import { PortableTextNormalStyle } from '../components/PortableTextNormalStyle';
 import { PortableTextHeadingStyle } from '../components/PortableTextHeadingStyle';
-import { PortableTextBlockquoteStyle } from '../components/PortableTextBlockquoteStyle';
 import { TransferIcon } from '@sanity/icons';
 import { PortableTextBdiDecorator } from '../components/PortableTextBdiDecorator';
-import { defineField, PortableTextListBlock, PortableTextSpan, PortableTextTextBlock } from 'sanity';
+import { createLink } from '../schemaTypes/link';
+import { PortableTextListBlock, PortableTextSpan, PortableTextTextBlock } from 'sanity';
 import { FSI, PDI } from './languageUtils';
 
 export const portableTextConfig = {
@@ -11,7 +10,6 @@ export const portableTextConfig = {
         normal: {
             value: 'normal',
             title: 'Normal',
-            component: PortableTextNormalStyle,
         },
         heading: {
             value: 'heading',
@@ -21,7 +19,6 @@ export const portableTextConfig = {
         blockquote: {
             value: 'blockquote',
             title: 'Blockquote',
-            component: PortableTextBlockquoteStyle,
         },
     },
     lists: {
@@ -51,10 +48,10 @@ export const portableTextConfig = {
         },
     },
     annotations: {
-        link: defineField({
+        link: createLink({
             name: 'link',
-            type: 'link',
             title: 'Link',
+            modal: 'popover',
         }),
     },
 };

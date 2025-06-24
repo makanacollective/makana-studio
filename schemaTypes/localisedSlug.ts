@@ -28,8 +28,6 @@ export const createLocalisedSlug = (
                 // TODO validation
                 options: {
                     source: sourceBase ? `${sourceBase}.${lang.id}` : undefined,
-                    // TODO isUnique
-                    // TODO slugify
                 },
             });
         }),

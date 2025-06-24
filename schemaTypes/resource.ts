@@ -1,16 +1,16 @@
-import { CalendarIcon } from '@sanity/icons';
+import { PlugIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
-import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
+import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 import { createLocalisedSlug } from './localisedSlug';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';
 
-export const HAPPENING_ICON = CalendarIcon;
+export const RESOURCE_ICON = PlugIcon;
 
-export const HAPPENING_DATE_ORDERING: SortOrderingItem[] = [
+export const RESOURCE_DATE_ORDERING: SortOrderingItem[] = [
     {
-        field: 'startDate',
+        field: `date`,
         direction: 'desc',
     },
     {
@@ -20,11 +20,11 @@ export const HAPPENING_DATE_ORDERING: SortOrderingItem[] = [
 ];
 
 export default defineType({
-    name: 'happening',
+    name: 'resource',
     type: 'document',
-    title: 'Happening',
+    title: 'Resource',
     // TODO description
-    icon: HAPPENING_ICON,
+    icon: RESOURCE_ICON,
     fields: [
         defineField({
             name: 'title',
@@ -39,47 +39,14 @@ export default defineType({
             sourceBase: 'title',
         }),
         defineField({
-            name: 'startDate',
+            name: 'date',
             type: 'date',
             title: 'Date',
-            // description: 'The local date when the happening occurs',
+            // TODO description
             // TODO validation
             options: {
                 dateFormat: DATE_FORMAT,
             },
-        }),
-        defineField({ // TODO improve
-            name: 'startTime',
-            type: 'string',
-            title: 'Time',
-            // description: 'The local time when the happening occurs (24-hrs)',
-            validation: (Rule) => Rule.regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { // TODO improve
-                name: '24-hour time format (HH:mm)',
-                invert: false,
-            }),
-            placeholder: 'e.g. 19:30',
-        }),
-        defineField({ // TODO improve
-            name: 'timezone',
-            type: 'string',
-            title: 'Time Zone',
-            // description: 'The local time zone where the happening occurs',
-            // TODO validation
-            options: {
-                list: [
-                    { title: 'New York (EST/EDT)', value: 'America/New_York' },
-                    { title: 'London (GMT/BST)', value: 'Europe/London' },
-                    { title: 'Amman (Jordan)', value: 'Asia/Amman' },
-                    // TODO make dynamic
-                ],
-            },
-        }),
-        defineField({
-            name: 'location',
-            type: 'localisedString',
-            title: 'Location',
-            // TODO description
-            // TODO validation
         }),
         defineField({
             name: 'summary',
@@ -118,7 +85,7 @@ export default defineType({
         {
             name: 'dateDesc',
             title: 'date',
-            by: HAPPENING_DATE_ORDERING,
+            by: RESOURCE_DATE_ORDERING,
         },
         ...SUPPORTED_LANGUAGES.map((lang) => {
             return {
@@ -130,7 +97,7 @@ export default defineType({
                         direction: 'asc',
                     },
                     {
-                        field: 'startDate',
+                        field: `date`,
                         direction: 'desc',
                     },
                 ] as SortOrderingItem[],
@@ -140,24 +107,20 @@ export default defineType({
     preview: {
         select: {
             title: 'title',
-            startDate: 'startDate',
-            startTime: 'startTime',
-            location: 'location',
+            date: 'date',
             summary: 'summary',
             mainImage: 'mainImage',
         },
         prepare(selection) {
             const {
                 title,
-                startDate,
-                startTime,
-                location,
+                date,
                 summary,
                 mainImage,
             } = selection;
             return {
                 title: renderLocalisedString(title),
-                subtitle: [renderIsoDate(startDate, { mode: 'full', withFallback: true }), startTime, renderLocalisedString(location)].filter(Boolean)?.join(', '),
+                subtitle: renderIsoDate(date, { mode: 'yearAndMonth', withFallback: true }),
                 description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,
             };
