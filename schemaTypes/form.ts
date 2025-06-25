@@ -1,37 +1,38 @@
 import { BillIcon, BlockContentIcon, HelpCircleIcon, SelectIcon, StringIcon, UlistIcon, UnknownIcon } from '@sanity/icons';
 import { defineArrayMember, defineField, defineType, SortOrderingItem } from 'sanity';
-import { DEFAULT_LANGUAGE, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
+import { FSI, PDI, renderLocalisedString } from '../lib/languageUtils';
+import { descriptions } from '../lib/descriptionUtils';
 
 export const FORM_ICON = BillIcon;
 
-export const FORM_TITLE_ORDERING: SortOrderingItem[] = [
+export const FORM_REFERENCE_NAME_ORDERING: SortOrderingItem[] = [
     {
-        field: `title.${DEFAULT_LANGUAGE?.id}`,
+        field: `referenceName`,
         direction: 'asc',
     },
 ];
+
+// TODO validations
 
 export default defineType({
     name: 'form',
     type: 'document',
     title: 'Form',
-    // TODO description
+    description: descriptions.document('all language versions of a form'),
     icon: FORM_ICON,
     fields: [
         defineField({
-            name: 'title',
-            type: 'localisedString',
-            title: 'Title',
-            // TODO description
-            // TODO validation
+            name: 'referenceName',
+            type: 'string',
+            title: 'Reference Name',
+            description: descriptions.referenceName('form'),
         }),
-        // TODO api
+        // TODO implement endpoint stuff
         defineField({
             name: 'fields',
             type: 'array',
             title: 'Fields',
-            // TODO description
-            // TODO validation
+            description: descriptions.formFields(),
             of: [
                 defineArrayMember({
                     name: 'field',
@@ -42,15 +43,13 @@ export default defineType({
                             name: 'label',
                             type: 'localisedString',
                             title: 'Label',
-                            // TODO description
-                            // TODO validation
+                            description: descriptions.formFieldLabel(),
                         }),
                         defineField({ // TODO improve
                             name: 'uid',
                             type: 'slug',
                             title: 'Unique Identifier',
-                            // TODO description
-                            // TODO validation
+                            description: descriptions.formFieldUid(),
                             options: {
                                 // @ts-ignore
                                 source: (_, context) => context.parent.label?.en || context.parent.label?.ar || undefined,
@@ -60,8 +59,7 @@ export default defineType({
                             name: 'type',
                             type: 'string',
                             title: 'Type',
-                            // TODO description
-                            // TODO validation
+                            description: descriptions.formFieldType(),
                             initialValue: 'text',
                             options: {
                                 list: [
@@ -88,6 +86,7 @@ export default defineType({
                             name: 'options',
                             type: 'array',
                             title: 'Options',
+                            description: descriptions.formFieldOptions(),
                             hidden: ({ parent }) => !['select', 'checkbox'].includes(parent?.type),
                             of: [
                                 defineArrayMember({
@@ -100,8 +99,7 @@ export default defineType({
                                             name: 'label',
                                             type: 'localisedString',
                                             title: 'Option',
-                                            // TODO description
-                                            // TODO validation
+                                            description: descriptions.formFieldOptionLabel(),
                                         }),
                                     ],
                                     preview: {
@@ -155,30 +153,25 @@ export default defineType({
             ],
         }),
     ],
-    orderings: SUPPORTED_LANGUAGES.map((lang) => {
-        return {
-            name: `titleAsc_${lang.id}`,
-            title: `title (${lang.title})`,
-            by: [
-                {
-                    field: `title.${lang.id}`,
-                    direction: 'asc',
-                },
-            ],
-        };
-    }),
+    orderings: [
+        {
+            name: 'referenceNameAsc',
+            title: 'reference name',
+            by: FORM_REFERENCE_NAME_ORDERING,
+        },
+    ],
     preview: {
         select: {
-            title: 'title',
+            referenceName: 'referenceName',
             fields: 'fields',
         },
         prepare(selection) {
             const {
-                title,
+                referenceName,
                 fields,
             } = selection;
             return {
-                title: renderLocalisedString(title),
+                title: referenceName ? `${FSI}${referenceName}${PDI}` : undefined,
                 subtitle: `${fields?.length || '0'} field${fields?.length === 1 ? '' : 's'}`,
             };
         },

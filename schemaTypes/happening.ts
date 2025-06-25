@@ -1,6 +1,7 @@
 import { CalendarIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
-import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
+import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SEPARATOR, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
+import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
@@ -23,26 +24,27 @@ export default defineType({
     name: 'happening',
     type: 'document',
     title: 'Happening',
-    // TODO description
+    description: descriptions.document('all language versions of a happening, such as an event or programme'),
     icon: HAPPENING_ICON,
     fields: [
+        // TODO add note about language
         defineField({
             name: 'title',
             type: 'localisedString',
             title: 'Title',
-            // TODO description
-            // TODO validation
+            description: descriptions.title(false, 'happening'),
         }),
         createLocalisedSlug({
             name: 'slug',
             title: 'Slug',
+            description: descriptions.slug(false, 'happening'),
             sourceBase: 'title',
         }),
-        defineField({
+        defineField({ // TODO improve
             name: 'startDate',
             type: 'date',
             title: 'Date',
-            // description: 'The local date when the happening occurs',
+            description: descriptions.startDate('happening'),
             // TODO validation
             options: {
                 dateFormat: DATE_FORMAT,
@@ -52,8 +54,8 @@ export default defineType({
             name: 'startTime',
             type: 'string',
             title: 'Time',
-            // description: 'The local time when the happening occurs (24-hrs)',
-            validation: (Rule) => Rule.regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { // TODO improve
+            description: descriptions.startDate('happening'),
+            validation: (Rule) => Rule.regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
                 name: '24-hour time format (HH:mm)',
                 invert: false,
             }),
@@ -63,14 +65,14 @@ export default defineType({
             name: 'timezone',
             type: 'string',
             title: 'Time Zone',
-            // description: 'The local time zone where the happening occurs',
+            description: descriptions.timezone('happening'),
             // TODO validation
+            // TODO initialValue
             options: {
                 list: [
                     { title: 'New York (EST/EDT)', value: 'America/New_York' },
                     { title: 'London (GMT/BST)', value: 'Europe/London' },
                     { title: 'Amman (Jordan)', value: 'Asia/Amman' },
-                    // TODO make dynamic
                 ],
             },
         }),
@@ -78,22 +80,19 @@ export default defineType({
             name: 'location',
             type: 'localisedString',
             title: 'Location',
-            // TODO description
-            // TODO validation
+            description: descriptions.location('happening'),
         }),
         defineField({
             name: 'summary',
             type: 'localisedText',
             title: 'Summary',
-            // TODO description
-            // TODO validation
+            description: descriptions.summary(false, 'happening'),
         }),
         defineField({
             name: 'mainImage',
             type: 'image',
             title: 'Cover Image',
-            // TODO description
-            // TODO validation
+            description: descriptions.mainImage('happening'),
             options: {
                 hotspot: {
                     previews: HOTSPOT_PREVIEWS,
@@ -105,6 +104,7 @@ export default defineType({
             name: 'content',
             type: 'object',
             title: 'Content',
+            description: descriptions.content(false, 'happening'),
             fields: SUPPORTED_LANGUAGES.map((lang) => {
                 return createPageBuilder({
                     name: lang.id,
@@ -157,7 +157,7 @@ export default defineType({
             } = selection;
             return {
                 title: renderLocalisedString(title),
-                subtitle: [renderIsoDate(startDate, { mode: 'full', withFallback: true }), startTime, renderLocalisedString(location)].filter(Boolean)?.join(', '),
+                subtitle: [renderIsoDate(startDate, { mode: 'full', withFallback: true }), startTime, renderLocalisedString(location)].filter(Boolean)?.join(SEPARATOR),
                 description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,
             };

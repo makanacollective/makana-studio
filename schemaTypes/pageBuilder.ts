@@ -1,10 +1,11 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { bodyPortableTextBlock } from './bodyPortableText';
 import { ImageIcon, ImagesIcon, PlayIcon, VideoIcon } from '@sanity/icons';
+import { descriptions } from '../lib/descriptionUtils';
 import { auxiliaryPortableTextBlock } from './auxiliaryPortableText';
 import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
 import { RTLCompatiblePortableTextEditor } from '../components/RTLCompatiblePortableTextEditor';
-import { FSI, PDI, renderLocalisedString } from '../lib/languageUtils';
+import { FSI, PDI } from '../lib/languageUtils';
 import { renderPortableTextAsPlainText } from '../lib/portableTextUtils';
 import { FORM_ICON } from './form';
 
@@ -13,6 +14,7 @@ export const createPageBuilder = (
         as?: 'field' | 'type';
         name?: string;
         title?: string;
+        description?: string;
         inputDirection?: string | string[];
     } = {}
 ): any => {
@@ -20,12 +22,14 @@ export const createPageBuilder = (
         as = 'field',
         name = 'pageBuilder',
         title = 'Page Builder',
+        description,
         inputDirection = 'auto',
     } = options;
     const definition = {
         name: name,
         type: 'array',
         title: title,
+        description: description || undefined,
         of: [
             defineArrayMember({
                 ...bodyPortableTextBlock,
@@ -40,8 +44,7 @@ export const createPageBuilder = (
                         name: 'images',
                         type: 'array',
                         title: 'Image(s)',
-                        // TODO description
-                        // TODO validation
+                        description: descriptions.pageBuilderImages(),
                         of: [
                             defineArrayMember({
                                 type: 'image',
@@ -54,7 +57,7 @@ export const createPageBuilder = (
                                         name: 'altText',
                                         type: 'string',
                                         title: 'Alt Text',
-                                        description: 'Important for accessibility and SEO',
+                                        description: descriptions.pageBuilderImageAltText(),
                                         components: {
                                             input: RTLCompatibleInput,
                                         },
@@ -71,8 +74,7 @@ export const createPageBuilder = (
                         name: 'caption',
                         type: 'array',
                         title: 'Caption',
-                        // TODO description
-                        // TODO validation
+                        description: descriptions.pageBuilderCaption(),
                         of: [
                             defineArrayMember({
                                 ...auxiliaryPortableTextBlock,
@@ -121,14 +123,14 @@ export const createPageBuilder = (
                         name: 'url',
                         type: 'url',
                         title: 'URL',
-                        // TODO description
-                        // TODO validation
+                        description: descriptions.pageBuilderVideoUrl(),
+                        // TODO validation youtube and vimeo
                     }),
                     defineField({
                         name: 'aspectRatio',
                         type: 'string',
                         title: 'Aspect Ratio',
-                        // TODO description
+                        description: descriptions.pageBuilderVideoAspectRatio(),
                         initialValue: '16/9',
                         // TODO validation
                     }),
@@ -136,8 +138,7 @@ export const createPageBuilder = (
                         name: 'caption',
                         type: 'array',
                         title: 'Caption',
-                        // TODO description
-                        // TODO validation
+                        description: descriptions.pageBuilderCaption(),
                         of: [
                             defineArrayMember({
                                 ...auxiliaryPortableTextBlock,
@@ -169,7 +170,7 @@ export const createPageBuilder = (
                             caption,
                         } = selection;
                         return {
-                            title: `${FSI}Video (${aspectRatio || 'No aspect ratio'}): ${url || 'No URL'}${PDI}`,
+                            title: `${FSI}Video (${aspectRatio ? `${aspectRatio} aspect ratio` : 'Aspect ratio not defined'}): ${url || 'No URL'}${PDI}`,
                             subtitle: caption ? `${FSI}${renderPortableTextAsPlainText(caption)}${PDI}` : 'No caption',
                         };
                     },
@@ -185,6 +186,7 @@ export const createPageBuilder = (
                         name: 'file',
                         type: 'file',
                         title: 'File',
+                        description: descriptions.pageBuilderAudioFile(),
                         options: {
                             accept: 'audio/*',
                         },
@@ -193,8 +195,7 @@ export const createPageBuilder = (
                         name: 'caption',
                         type: 'array',
                         title: 'Caption',
-                        // TODO description
-                        // TODO validation
+                        description: descriptions.pageBuilderCaption(),
                         of: [
                             defineArrayMember({
                                 ...auxiliaryPortableTextBlock,
@@ -215,16 +216,18 @@ export const createPageBuilder = (
                 ],
                 preview: {
                     select: {
-                        originalFilename: 'file.asset.originalFilename',
+                        file: 'file',
+                        fileName: 'file.asset.originalFilename',
                         caption: 'caption',
                     },
                     prepare(selection) {
                         const {
-                            originalFilename,
+                            file,
+                            fileName,
                             caption,
                         } = selection;
                         return {
-                            title: `Audio: ${FSI}${originalFilename || 'None selected'}${PDI}`,
+                            title: `Audio: ${FSI}${file && file._ref ? (fileName ? `${FSI}${fileName}${PDI}` : 'Untitled') : 'None selected'}${PDI}`,
                             subtitle: caption ? `${FSI}${renderPortableTextAsPlainText(caption)}${PDI}` : 'No caption',
                         };
                     },
@@ -240,8 +243,7 @@ export const createPageBuilder = (
                         name: 'form',
                         type: 'reference',
                         title: 'Form',
-                        // TODO description
-                        // TODO validation
+                        description: descriptions.pageBuilderForm(),
                         to: [
                             {
                                 type: 'form',
@@ -256,15 +258,16 @@ export const createPageBuilder = (
                 preview: {
                     select: {
                         form: 'form',
-                        formTitle: 'form.title',
+                        referenceName: 'form.referenceName',
                     },
                     prepare(selection) {
                         const {
                             form,
-                            formTitle,
+                            referenceName,
                         } = selection;
                         return {
-                            title: `${FSI}Form: ${form && form._ref ? renderLocalisedString(formTitle) : 'None selected'}${PDI}`,
+                            title: `${FSI}Form: ${form && form._ref ? (referenceName ? `${FSI}${referenceName}${PDI}` : 'Untitled') : 'None selected'}${PDI}`,
+                            subtitle: form && form._ref && referenceName ? '(Note that the form name is for reference only and will not be displayed)' : undefined,
                         };
                     },
                 },

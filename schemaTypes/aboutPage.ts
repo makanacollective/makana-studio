@@ -1,5 +1,6 @@
 import { InfoOutlineIcon } from '@sanity/icons';
 import { defineField, defineType } from 'sanity';
+import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
 import { renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 import { createPageBuilder } from './pageBuilder';
@@ -10,25 +11,26 @@ export default defineType({
     name: 'aboutPage',
     type: 'document',
     title: 'About Page',
-    // TODO description
     icon: ABOUT_PAGE_ICON,
     fields: [
+        // TODO add note about language
         defineField({
             name: 'title',
             type: 'localisedString',
             title: 'Title',
-            // TODO description
-            // TODO validation
+            description: descriptions.title(false, 'page'),
         }),
         createLocalisedSlug({
             name: 'slug',
             title: 'Slug',
+            description: descriptions.slug(false, 'page'),
             sourceBase: 'title',
         }),
         defineField({
             name: 'content',
             type: 'object',
             title: 'Content',
+            description: descriptions.content(false, 'page'),
             fields: SUPPORTED_LANGUAGES.map((lang) => {
                 return createPageBuilder({
                     name: lang.id,

@@ -1,0 +1,40 @@
+const defaultName = 'document';
+
+export const descriptions = {
+    // documents and singletons
+    analytics:      () => `A tracking script used for website analytics, if applicable.`,
+    content:        (isMonolingual: boolean, name = defaultName) => `The main content of ${isMonolingual? 'this language version of the' : 'all language versions of this'} ${name}.`,
+    date:           (name = defaultName) => `The date associated with this ${name}, primarily used for sorting and display.`,
+    document:       (nameWithArticle: string) => `A ${defaultName} representing ${nameWithArticle}.`,
+    featuredItems:  () => `Pages to highlight as featured content.`,
+    keywords:       (name = defaultName) => `Descriptive keywords for this ${name}, used for search engine optimisation. Type a keyword and press Enter to add it.`,
+    language:       () => `The language of this ${defaultName}, used for organisation and other key functions. This value cannot be changed once set.`,
+    location:       (name = 'event') => `The venue or place where this ${name} occurs.`,
+    logo:           () => `The logo used across the website. Required format: SVG.`,
+    mainImage:      (name = defaultName, refersToWebsite = false) => `The main visual representation of this ${name}${refersToWebsite ? '' : ' on the website and'} in social media previews. ${refersToWebsite ? 'Recommended dimensions: 1200×630px (1.91:1 aspect ratio). Recommended format: PNG (non-transparent).' : `Use the crop/hotspot tool (found in the field's upper-right corner) to ensure the image works well across multiple aspect ratios.`}`,
+    referenceName:  (name = defaultName) => `A name used to identify this ${name} internally. Not shown on the website.`,
+    slug:           (isMonolingual: boolean, name = defaultName) => `${isMonolingual ? 'A URL-friendly identifier for this language version' : 'URL-friendly identifiers for each language version'} of this ${name}. Without a slug, the ${name} cannot appear on the website. Changing a slug after the ${name} is published and shared may result in broken links.`,
+    startDate:      (name = 'event') => `The local date when this ${name} occurs.`,
+    startTime:      (name = 'event') => `The local time when this ${name} occurs.`,
+    summary:        (isMonolingual: boolean, name = defaultName) => `${isMonolingual ? 'A brief text snippet that introduces' : 'Brief text snippets that introduce'} this ${name} in search engine results and social media previews.`,
+    timezone:       (name = 'event') => `The local time zone where the ${name} occurs.`,
+    title:          (isMonolingual: boolean, name = defaultName) => `The title${isMonolingual ? '' : 's'} of this ${name}, used in listings, previews, and webpage headers.`,
+    translations:   () => `TODO`,
+    // objects and modules
+    formFields:             () => `The list of input fields that make up this form.`,
+    formFieldLabel:         () => `TODO`,
+    formFieldUid:           () => `A unique identifier used to reference this field programmatically (e.g., in submissions).`,
+    formFieldType:          () => `The type of input field to display.`,
+    formFieldOptions:       () => `The list of selectable options for this field.`,
+    formFieldOptionLabel:   () => `TODO`,
+    linkType:           () => `TODO`,
+    linkInternalTarget: () => `TODO`,
+    linkExternalTarget: () => `TODO`,
+    pageBuilderCaption:             () => `TODO`,
+    pageBuilderImages:              () => `TODO`,
+    pageBuilderImageAltText:        () => `TODO`, // A textual description of this image, used by screen readers to announce image contents to visually-impaired users. Important for accessibility and SEO
+    pageBuilderVideoUrl:            () => `TODO`,
+    pageBuilderVideoAspectRatio:    () => `TODO`,
+    pageBuilderAudioFile:           () => `TODO`,
+    pageBuilderForm:                () => `TODO`,
+};

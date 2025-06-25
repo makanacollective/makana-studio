@@ -6,11 +6,10 @@ import { PROJECT_ICON, PROJECT_DATE_ORDERING } from './schemaTypes/project';
 import { WRITING_ICON, WRITING_DATE_ORDERING } from './schemaTypes/writing';
 import { HAPPENING_ICON, HAPPENING_DATE_ORDERING } from './schemaTypes/happening';
 import { RESOURCE_ICON, RESOURCE_DATE_ORDERING } from './schemaTypes/resource';
-import { FORM_ICON, FORM_TITLE_ORDERING } from './schemaTypes/form';
-import { TRANSLATION_GROUP_ICON } from './schemaTypes/translationGroup';
+import { FORM_ICON, FORM_REFERENCE_NAME_ORDERING } from './schemaTypes/form';
 import { HOME_PAGE_ICON } from './schemaTypes/homePage';
 import { ABOUT_PAGE_ICON } from './schemaTypes/aboutPage';
-import { WEBSITE_SETTINGS_ICON } from './schemaTypes/websiteSettings';
+import { WEBSITE_ICON } from './schemaTypes/website';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 import { LANGUAGE_FIELD_NAME } from './lib/languageUtils';
@@ -26,18 +25,14 @@ export default defineConfig({
         structureTool({
             structure: (S) => {
                 return S.list().title('Content').items([
-                    S.divider().title('Main Documents'),
                     localisedDocumentList(S, { schemaTypeName: 'project', title: 'Projects', id: 'projects', icon: PROJECT_ICON, defaultOrdering: PROJECT_DATE_ORDERING,
-                        before: [
-                            S.divider().title('Project Pages'),
-                        ],
                         after: [
                             S.divider().title('Special Projects'),
                             S.listItem()
                                 .title('Counter-Map of Amman')
                                 .id('counterMapOfAmman')
                                 .child(
-                                    S.list().title('Counter-Map of Amman').items([])
+                                    S.list().title('Counter-Map of Amman (Coming Soon)').items([])
                                 )
                         ],
                     }),
@@ -45,12 +40,11 @@ export default defineConfig({
                     documentList(S, { schemaTypeName: 'happening', title: 'Happenings', id: 'happenings', icon: HAPPENING_ICON, defaultOrdering: HAPPENING_DATE_ORDERING, }),
                     documentList(S, { schemaTypeName: 'resource', title: 'Resources', id: 'resources', icon: RESOURCE_ICON, defaultOrdering: RESOURCE_DATE_ORDERING, }),
                     S.divider().title('Supporting Documents'),
-                    documentList(S, { schemaTypeName: 'form', title: 'Forms', id: 'forms', icon: FORM_ICON, defaultOrdering: FORM_TITLE_ORDERING, }),
-                    documentList(S, { schemaTypeName: 'translationGroup', title: 'Translation Groups', id: 'translationGroups', icon: TRANSLATION_GROUP_ICON, defaultOrdering: [{ field: '_createdAt', direction: 'desc', }] }),
+                    documentList(S, { schemaTypeName: 'form', title: 'Forms', id: 'forms', icon: FORM_ICON, defaultOrdering: FORM_REFERENCE_NAME_ORDERING, }),
                     S.divider().title('Website Configuration'),
                     singletonDocument(S, { schemaTypeName: 'homePage', title: 'Homepage', icon: HOME_PAGE_ICON, }),
                     singletonDocument(S, { schemaTypeName: 'aboutPage', title: 'About Page', icon: ABOUT_PAGE_ICON, }),
-                    singletonDocument(S, { schemaTypeName: 'websiteSettings', title: 'Website Settings', icon: WEBSITE_SETTINGS_ICON, }),
+                    singletonDocument(S, { schemaTypeName: 'website', title: 'Website Settings', icon: WEBSITE_ICON, }),
                     ...S.documentTypeListItems().filter((listItem) => {
                         const id = listItem.getId();
                         return typeof id === 'string' && ![
@@ -62,7 +56,7 @@ export default defineConfig({
                             'translationGroup',
                             'homePage',
                             'aboutPage',
-                            'websiteSettings',
+                            'website',
                         ].includes(id);
                     }),
                 ]);
@@ -90,7 +84,25 @@ export default defineConfig({
                     }),
                 };
             }),
-            ...prev.filter(({ schemaType }) => !singletonSchemaTypeNames.has(schemaType)),
+            {
+                id: `translation-group-by-type`,
+                title: `translation group by type`,
+                schemaType: 'translationGroup',
+                parameters: [
+                    {
+                        name: 'type',
+                        type: 'string',
+                    },
+                ],
+                value: (params: { schemaTypeName: string; }) => ({
+                    type: params.schemaTypeName,
+                }),
+            },
+            ...prev.filter(({ schemaType }) => {
+                if (schemaType === 'translationGroup') { return false; }
+                if (singletonSchemaTypeNames.has(schemaType)) { return false; }
+                return true;
+            }),
         ],
     },
     document: {

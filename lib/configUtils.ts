@@ -12,7 +12,7 @@ export const localisedSchemaTypeNames = new Set([
 export const singletonSchemaTypeNames = new Set([
     'aboutPage',
     'homePage',
-    'websiteSettings',
+    'website',
 ]);
 
 export const targetableSchemaTypeNames = new Set([
@@ -92,8 +92,7 @@ export const localisedDocumentList = (
             .child(
                 S.documentTypeList(schemaTypeName)
                     .title(`${title} (${lang.title})`)
-                    .filter(`_type == $schemaTypeName && ${LANGUAGE_FIELD_NAME} == $lang`)
-                    .params({ schemaTypeName, lang: lang.id })
+                    .filter(`_type == '${schemaTypeName}' && ${LANGUAGE_FIELD_NAME} == '${lang.id}'`)
                     .apiVersion('2025-05-15')
                     .menuItems(filterMenuItems(S.documentTypeList(schemaTypeName).getMenuItems()))
                     .defaultOrdering(
@@ -106,7 +105,25 @@ export const localisedDocumentList = (
                     ])
             );
     });
-    return baseListItem.child(S.list().title(title).items([...before, ...languageItems, ...after]));
+    const translationsItem = S.listItem()
+        .title('Translation Groups')
+        .id('translationGroups')
+        .child(
+            S.documentTypeList('translationGroup')
+                .title(`Translation Groups`)
+                .filter(`_type == 'translationGroup' && type == '${schemaTypeName}'`)
+                .apiVersion('2025-05-15')
+                .defaultOrdering([
+                    {
+                        field: '_createdAt',
+                        direction: 'desc',
+                    },
+                ])
+                .initialValueTemplates([
+                    S.initialValueTemplateItem(`translation-group-by-type`, { schemaTypeName: schemaTypeName })
+                ])
+        );
+    return baseListItem.child(S.list().title(title).items([...before, ...languageItems, translationsItem, ...after]));
 };
 
 export const singletonDocument = (

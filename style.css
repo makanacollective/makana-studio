@@ -98,5 +98,10 @@
 .makana-pte-heading strong {
     font-weight: 700 !important;
     font-size: 0.9375rem !important;
-    line-height: calc(1.53333);
+    line-height: calc(1.53333) !important;
+}
+
+/* style change for monospace string inputs (see ./components/MonospaceStringInput.tsx) */
+.makana-monospace-string input {
+    font-family: monospace !important;
 }

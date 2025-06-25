@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity';
 import { targetableSchemaTypeNames } from '../lib/configUtils';
+import { descriptions } from '../lib/descriptionUtils';
 
 export const createLink = (
     options: {
@@ -24,7 +25,7 @@ export const createLink = (
                 name: 'type',
                 type: 'string',
                 title: 'Type',
-                // TODO description
+                description: descriptions.linkType(),
                 options: {
                     list: [
                         {
@@ -45,7 +46,7 @@ export const createLink = (
                 name: 'internalTarget',
                 type: 'reference',
                 title: 'Internal Target',
-                // TODO description
+                description: descriptions.linkInternalTarget(),
                 to: Array.from(targetableSchemaTypeNames).map((schemaTypeName) => {
                     return {
                         type: schemaTypeName,
@@ -57,10 +58,10 @@ export const createLink = (
                 hidden: ({ parent }) => parent.type !== 'internal',
             }),
             defineField({
-                name: 'externalUrl',
+                name: 'externalTarget',
                 type: 'url',
-                title: 'External URL',
-                // TODO description
+                title: 'External Target',
+                description: descriptions.linkExternalTarget(),
                 hidden: ({ parent }) => parent.type !== 'external',
                 validation: (Rule) => Rule.uri({
                     scheme: ['http', 'https', 'tel', 'mailto'],

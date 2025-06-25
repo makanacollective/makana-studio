@@ -11,8 +11,6 @@ export default defineType({
             name: lang.id,
             type: 'string',
             title: lang.title,
-            // TODO description
-            // TODO validation
             components: {
                 input: RTLCompatibleInput,
             },

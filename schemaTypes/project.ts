@@ -1,8 +1,11 @@
 import { StarIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
+import { descriptions } from '../lib/descriptionUtils';
 import { FSI, LANGUAGE_FIELD_NAME, PDI } from '../lib/languageUtils';
 import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
+import { customSlugify, validateSlug } from '../lib/slugUtils';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
+import { TEXT_FIELD_ROWS } from '../lib/miscUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';
 
@@ -23,19 +26,20 @@ export default defineType({
     name: 'project',
     type: 'document',
     title: 'Project',
-    // TODO description
+    description: descriptions.document('a single-language version of a project page'),
     icon: PROJECT_ICON,
     fields: [
+        // TODO add note about language
         defineField({
             name: LANGUAGE_FIELD_NAME,
             type: LANGUAGE_FIELD_NAME,
         }),
+        // TODO signifiy whether translations for this document exist
         defineField({
             name: 'title',
             type: 'string',
             title: 'Title',
-            // TODO description
-            // TODO validation
+            description: descriptions.title(true, 'project'),
             components: {
                 input: RTLCompatibleInput,
             },
@@ -48,21 +52,18 @@ export default defineType({
             name: 'slug',
             type: 'slug',
             title: 'Slug',
-            // TODO description
-            // TODO validation
+            description: descriptions.slug(true, 'project'),
+            validation: (Rule) => Rule.custom(validateSlug),
             options: {
                 source: 'title',
-                // documentInternationalization: {
-                //     exclude: true,
-                // },
+                slugify: customSlugify,
             },
         }),
         defineField({
             name: 'date',
             type: 'date',
             title: 'Date',
-            // TODO description
-            // TODO validation
+            description: descriptions.date('project'),
             options: {
                 dateFormat: DATE_FORMAT,
             },
@@ -71,9 +72,8 @@ export default defineType({
             name: 'summary',
             type: 'text',
             title: 'Summary',
-            rows: 4,
-            // TODO description
-            // TODO validation
+            rows: TEXT_FIELD_ROWS,
+            description: descriptions.summary(true, 'project'),
             components: {
                 input: RTLCompatibleInput,
             },
@@ -86,8 +86,7 @@ export default defineType({
             name: 'mainImage',
             type: 'image',
             title: 'Cover Image',
-            // TODO description
-            // TODO validation
+            description: descriptions.mainImage('project'),
             options: {
                 hotspot: {
                     previews: HOTSPOT_PREVIEWS,
@@ -98,6 +97,7 @@ export default defineType({
         createPageBuilder({
             name: 'content',
             title: 'Content',
+            description: descriptions.content(true, 'project'),
             inputDirection: [LANGUAGE_FIELD_NAME],
         }),
     ],

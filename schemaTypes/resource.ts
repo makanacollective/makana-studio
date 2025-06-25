@@ -1,6 +1,7 @@
 import { PlugIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
 import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
+import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
@@ -23,27 +24,27 @@ export default defineType({
     name: 'resource',
     type: 'document',
     title: 'Resource',
-    // TODO description
+    description: descriptions.document('all language versions of a resource page'),
     icon: RESOURCE_ICON,
     fields: [
+        // TODO add note about language
         defineField({
             name: 'title',
             type: 'localisedString',
             title: 'Title',
-            // TODO description
-            // TODO validation
+            description: descriptions.title(false, 'resource'),
         }),
         createLocalisedSlug({
             name: 'slug',
             title: 'Slug',
+            description: descriptions.slug(false, 'resource'),
             sourceBase: 'title',
         }),
         defineField({
             name: 'date',
             type: 'date',
             title: 'Date',
-            // TODO description
-            // TODO validation
+            description: descriptions.date('resource'),
             options: {
                 dateFormat: DATE_FORMAT,
             },
@@ -52,15 +53,13 @@ export default defineType({
             name: 'summary',
             type: 'localisedText',
             title: 'Summary',
-            // TODO description
-            // TODO validation
+            description: descriptions.summary(false, 'resource'),
         }),
         defineField({
             name: 'mainImage',
             type: 'image',
             title: 'Cover Image',
-            // TODO description
-            // TODO validation
+            description: descriptions.mainImage('resource'),
             options: {
                 hotspot: {
                     previews: HOTSPOT_PREVIEWS,
@@ -72,6 +71,7 @@ export default defineType({
             name: 'content',
             type: 'object',
             title: 'Content',
+            description: descriptions.content(false, 'resource'),
             fields: SUPPORTED_LANGUAGES.map((lang) => {
                 return createPageBuilder({
                     name: lang.id,

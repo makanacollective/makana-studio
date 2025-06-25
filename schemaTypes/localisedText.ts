@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity';
 import { SUPPORTED_LANGUAGES } from '../lib/languageUtils';
+import { TEXT_FIELD_ROWS } from '../lib/miscUtils';
 import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
 
 export default defineType({
@@ -11,9 +12,7 @@ export default defineType({
             name: lang.id,
             type: 'text',
             title: lang.title,
-            // TODO description
-            // TODO validation
-            rows: 5,
+            rows: TEXT_FIELD_ROWS,
             components: {
                 input: RTLCompatibleInput,
             },
@@ -23,7 +22,4 @@ export default defineType({
             },
         });
     }),
-    options: {
-        columns: SUPPORTED_LANGUAGES.length > 1 ? 2 : 1,
-    },
 });

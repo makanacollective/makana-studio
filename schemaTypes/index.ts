@@ -8,7 +8,7 @@ import writing from './writing';
 // singletons
 import aboutPage from './aboutPage';
 import homePage from './homePage';
-import websiteSettings from './websiteSettings';
+import website from './website';
 // objects
 import link from './link';
 import localisedSlug from './localisedSlug';
@@ -31,7 +31,7 @@ export const schemaTypes = new Set([
     // singletons
     aboutPage,
     homePage,
-    websiteSettings,
+    website,
     // objects
     link,
     localisedSlug,
