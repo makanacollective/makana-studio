@@ -74,7 +74,7 @@ export const createPageBuilder = (
                         name: 'caption',
                         type: 'array',
                         title: 'Caption',
-                        description: descriptions.pageBuilderCaption(),
+                        description: descriptions.pageBuilderCaption('image(s)'),
                         of: [
                             defineArrayMember({
                                 ...auxiliaryPortableTextBlock,

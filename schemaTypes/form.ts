@@ -101,6 +101,16 @@ export default defineType({
                                             title: 'Option',
                                             description: descriptions.formFieldOptionLabel(),
                                         }),
+                                        defineField({ // TODO improve
+                                            name: 'uid',
+                                            type: 'slug',
+                                            title: 'Unique Identifier',
+                                            description: descriptions.formFieldOptionUid(),
+                                            options: {
+                                                // @ts-ignore
+                                                source: (_, context) => context.parent.label?.en || context.parent.label?.ar || undefined,
+                                            },
+                                        }),
                                     ],
                                     preview: {
                                         select: {

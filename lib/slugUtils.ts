@@ -8,8 +8,12 @@ export const validateSlug = (value: { current?: string; } | undefined) => {
 };
 
 export const customSlugify = (input: string) => {
-    let slug = speakingurl(input, { truncate: 200, symbols: true });
-    slug = slug.replace(/_+/g, '-');
-    slug = slug.replace(/-+/g, '-');
+    const slug = speakingurl(input, {
+        truncate: 200,
+        symbols: false,
+        custom: {
+            '_': '-',
+        },
+    });
     return slug;
 };

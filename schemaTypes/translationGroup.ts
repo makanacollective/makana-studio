@@ -9,7 +9,7 @@ export default defineType({
     type: 'document',
     liveEdit: true,
     title: 'Translation Group',
-    description: descriptions.document('TODO'),
+    description: descriptions.document('a grouping of of all language versions of a content item'),
     icon: TranslateIcon,
     fields: [
         defineField({
