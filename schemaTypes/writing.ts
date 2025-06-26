@@ -4,7 +4,7 @@ import { descriptions } from '../lib/descriptionUtils';
 import { FSI, LANGUAGE_FIELD_NAME, PDI } from '../lib/languageUtils';
 import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
 import { customSlugify, validateSlug } from '../lib/slugUtils';
-import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
+import { DATE_FORMAT, renderIsoDate } from '../lib/dateTimeUtils';
 import { TEXT_FIELD_ROWS } from '../lib/miscUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';

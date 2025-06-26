@@ -80,6 +80,7 @@ export default defineType({
                                         title: 'Checkbox group',
                                     },
                                 ],
+                                layout: 'dropdown',
                             },
                         }),
                         defineField({

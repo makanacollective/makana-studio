@@ -3,7 +3,6 @@ import { LANGUAGE_FIELD_NAME, SUPPORTED_LANGUAGES } from './languageUtils';
 import { FC, SVGProps } from 'react';
 import { SortOrderingItem } from 'sanity';
 
-
 export const localisedSchemaTypeNames = new Set([
     'project',
     'writing',

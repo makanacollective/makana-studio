@@ -50,7 +50,6 @@ export default defineType({
                                     languageFilter,
                                     alreadyReferencedIdsFilter,
                                 ].filter(Boolean);
-                                console.log(filters);
                                 return {
                                     filter: filters.join(' && '),
                                 };

@@ -3,7 +3,7 @@ import { defineField, defineType, SortOrderingItem } from 'sanity';
 import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
-import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
+import { DATE_FORMAT, renderIsoDate } from '../lib/dateTimeUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';
 

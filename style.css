@@ -105,3 +105,13 @@
 .makana-monospace-string input {
     font-family: monospace !important;
 }
+
+/* controlled time input (see ./components/ControlledTimeFieldsAndInputs.tsx) */
+.makana-controlled-time-field fieldset[data-level='1'] > div:first-child {
+    display: none !important;
+}
+.makana-controlled-time-field fieldset[data-level='1'] > div:nth-child(2) {
+    border: unset !important;
+    box-shadow: unset !important;
+    padding: 0 !important;
+}

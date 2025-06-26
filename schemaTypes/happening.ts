@@ -3,7 +3,9 @@ import { defineField, defineType, SortOrderingItem } from 'sanity';
 import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SEPARATOR, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
 import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
-import { DATE_FORMAT, renderIsoDate } from '../lib/dateUtils';
+import { DATE_FORMAT, formattedTimeZones, renderIsoDate, TIME_SEPARATOR } from '../lib/dateTimeUtils';
+import { ControlledTimeField, ControlledTimeInput, PaddedAndSanitisedTimeInput } from '../components/ControlledTimeFieldsAndInputs';
+import { FullGridSpanField } from '../components/FullGridSpanField';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';
 
@@ -26,6 +28,16 @@ export default defineType({
     title: 'Happening',
     description: descriptions.document('all language versions of a happening, such as an event or programme'),
     icon: HAPPENING_ICON,
+    fieldsets: [
+        {
+            name: 'dateTime',
+            title: 'Date & Time',
+            description: descriptions.startDateTime('happening'),
+            options: {
+                columns: 2,
+            },
+        },
+    ],
     fields: [
         // TODO add note about language
         defineField({
@@ -40,40 +52,73 @@ export default defineType({
             description: descriptions.slug(false, 'happening'),
             sourceBase: 'title',
         }),
-        defineField({ // TODO improve
+        defineField({
             name: 'startDate',
             type: 'date',
             title: 'Date',
-            description: descriptions.startDate('happening'),
-            // TODO validation
+            fieldset: 'dateTime',
+            validation: (Rule) => Rule.custom((value, context) => {
+                const document = context?.document as Record<string, any> | undefined;
+                const startTime = document?.startTime;
+                const hasStartTime = startTime?.hours && startTime?.hours !== undefined;
+                if (!value && hasStartTime) {
+                    return 'Date is required when a time is specified';
+                }
+                return true;
+            }).warning(),
             options: {
                 dateFormat: DATE_FORMAT,
             },
         }),
-        defineField({ // TODO improve
+        defineField({
             name: 'startTime',
-            type: 'string',
-            title: 'Time',
-            description: descriptions.startDate('happening'),
-            validation: (Rule) => Rule.regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-                name: '24-hour time format (HH:mm)',
-                invert: false,
-            }),
-            placeholder: 'e.g. 19:30',
+            type: 'object',
+            fieldset: 'dateTime',
+            components: {
+                field: ControlledTimeField,
+                input: ControlledTimeInput,
+            },
+            fields: [
+                defineField({
+                    name: 'hours',
+                    type: 'string',
+                    title: 'Hours',
+                    placeholder: '00',
+                    components: {
+                        input: PaddedAndSanitisedTimeInput,
+                    },
+                    validation: (Rule) => Rule.custom((value, context) => {
+                        const parent = context?.parent as Record<string, any> | undefined;
+                        const hasMinutes = parent?.minutes && parent?.minutes !== undefined;
+                        if (!value && hasMinutes) {
+                            return 'Hours are required when minutes are specified';
+                        }
+                        return true;
+                    }).warning(),
+                }),
+                defineField({
+                    name: 'minutes',
+                    type: 'string',
+                    title: 'Minutes',
+                    placeholder: '00',
+                    components: {
+                        input: PaddedAndSanitisedTimeInput,
+                    },
+                }),
+            ],
         }),
-        defineField({ // TODO improve
+        defineField({
             name: 'timezone',
             type: 'string',
             title: 'Time Zone',
-            description: descriptions.timezone('happening'),
-            // TODO validation
-            // TODO initialValue
+            fieldset: 'dateTime',
+            initialValue: 'Asia/Amman',
+            components: {
+                field: FullGridSpanField,
+            },
             options: {
-                list: [
-                    { title: 'New York (EST/EDT)', value: 'America/New_York' },
-                    { title: 'London (GMT/BST)', value: 'Europe/London' },
-                    { title: 'Amman (Jordan)', value: 'Asia/Amman' },
-                ],
+                list: formattedTimeZones,
+                layout: 'dropdown',
             },
         }),
         defineField({
@@ -155,9 +200,12 @@ export default defineType({
                 summary,
                 mainImage,
             } = selection;
+            const renderedDate = renderIsoDate(startDate, { mode: 'full', withFallback: true });
+            const renderedTime = startTime && startTime.hours ? `${startTime.hours}${TIME_SEPARATOR}${startTime.minutes || '00'}` : undefined;
+            const renderedLocation = renderLocalisedString(location);
             return {
                 title: renderLocalisedString(title),
-                subtitle: [renderIsoDate(startDate, { mode: 'full', withFallback: true }), startTime, renderLocalisedString(location)].filter(Boolean)?.join(SEPARATOR),
+                subtitle: [renderedDate, renderedTime, renderedLocation].filter(Boolean)?.join(SEPARATOR),
                 description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,
             };
