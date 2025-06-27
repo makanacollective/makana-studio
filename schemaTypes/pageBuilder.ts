@@ -114,7 +114,7 @@ export const createPageBuilder = (
                 },
             }),
             defineArrayMember({
-                name: 'videoEmbedBlock',
+                name: 'videoBlock',
                 type: 'object',
                 title: 'Video',
                 icon: VideoIcon,
