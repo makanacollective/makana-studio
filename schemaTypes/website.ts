@@ -1,5 +1,5 @@
 import { CogIcon } from '@sanity/icons';
-import { defineField, defineType } from 'sanity';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 import { descriptions } from '../lib/descriptionUtils';
 import { MonospaceStringInput } from '../components/MonospaceStringInput';
 
@@ -29,9 +29,9 @@ export default defineType({
             title: 'Website Keywords',
             description: descriptions.keywords('website'),
             of: [
-                {
+                defineArrayMember({
                     type: 'string',
-                }
+                }),
             ],
             options: {
                 layout: 'tags',

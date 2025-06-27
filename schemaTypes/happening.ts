@@ -3,7 +3,7 @@ import { defineField, defineType, SortOrderingItem } from 'sanity';
 import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SEPARATOR, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
 import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
-import { DATE_FORMAT, formattedTimeZones, renderIsoDate, TIME_SEPARATOR } from '../lib/dateTimeUtils';
+import { DATE_FORMAT, DEFAULT_TIME_ZONE, formattedTimeZones, renderIsoDate, TIME_SEPARATOR } from '../lib/dateTimeUtils';
 import { ControlledTimeField, ControlledTimeInput, PaddedAndSanitisedTimeInput } from '../components/ControlledTimeFieldsAndInputs';
 import { FullGridSpanField } from '../components/FullGridSpanField';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
@@ -112,7 +112,7 @@ export default defineType({
             type: 'string',
             title: 'Time Zone',
             fieldset: 'dateTime',
-            initialValue: 'Asia/Amman',
+            initialValue: DEFAULT_TIME_ZONE,
             components: {
                 field: FullGridSpanField,
             },

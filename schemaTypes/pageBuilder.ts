@@ -124,15 +124,43 @@ export const createPageBuilder = (
                         type: 'url',
                         title: 'URL',
                         description: descriptions.pageBuilderVideoUrl(),
-                        // TODO validation youtube and vimeo
+                        validation: (Rule) => Rule.custom((value) => {
+                            if (!value) { return true; }
+                            const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i;
+                            const vimeoRegex = /^(https?:\/\/)?(www\.)?vimeo\.com\//i;
+                            if (ytRegex.test(value) || vimeoRegex.test(value)) {
+                                return true;
+                            }
+                            return 'URL must be a valid YouTube or Vimeo link';
+                        }),
                     }),
                     defineField({
                         name: 'aspectRatio',
                         type: 'string',
                         title: 'Aspect Ratio',
                         description: descriptions.pageBuilderVideoAspectRatio(),
-                        initialValue: '16/9',
-                        // TODO validation
+                        initialValue: '16:9',
+                        validation: (Rule) => Rule.custom((value) => {
+                            if (!value) { return true; }
+                            const regex = /^(\d+(\.\d+)?|(\d+(\.\d+)?)[/:](\d+(\.\d+)?))$/;
+                            if (!regex.test(value)) {
+                                return 'Aspect ratio must be a positive number or a ratio like 16/9 or 4:3';
+                            }
+                            if (value.includes('/') || value.includes(':')) {
+                                const parts = value.split(/[/:]/);
+                                const width = parseFloat(parts[0]);
+                                const height = parseFloat(parts[1]);
+                                if (width <= 0 || height <= 0) {
+                                    return 'Aspect ratio numbers must be positive and non-zero';
+                                }
+                            } else {
+                                const num = parseFloat(value);
+                                if (num <= 0) {
+                                    return 'Aspect ratio must be a positive number';
+                                }
+                            }
+                            return true;
+                        }),
                     }),
                     defineField({
                         name: 'caption',
@@ -253,21 +281,21 @@ export const createPageBuilder = (
                             disableNew: true,
                         },
                     }),
-                    // TODO which language? arabic? english? auto (default)? both?
                 ],
                 preview: {
                     select: {
                         form: 'form',
                         referenceName: 'form.referenceName',
+                        fields: 'form.fields',
                     },
                     prepare(selection) {
                         const {
                             form,
                             referenceName,
+                            fields,
                         } = selection;
                         return {
-                            title: `${FSI}Form: ${form && form._ref ? (referenceName ? `${FSI}${referenceName}${PDI}` : 'Untitled') : 'None selected'}${PDI}`,
-                            subtitle: form && form._ref && referenceName ? '(Note that the form name is for reference only and will not be displayed)' : undefined,
+                            title: `${FSI}Form ${form && form._ref ? `(${fields?.length || '0'} field${fields?.length === 1 ? '' : 's'})` : ''}: ${form && form._ref ? (referenceName ? `${FSI}${referenceName}${PDI}` : 'Untitled') : 'None selected'}${PDI}`,
                         };
                     },
                 },

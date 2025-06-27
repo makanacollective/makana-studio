@@ -115,3 +115,6 @@
     box-shadow: unset !important;
     padding: 0 !important;
 }
+.makana-hours-input [data-ui='TextInput'] input {
+    text-align: right;
+}

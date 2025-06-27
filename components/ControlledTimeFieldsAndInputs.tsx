@@ -53,23 +53,25 @@ export const ControlledTimeInput = (props: ObjectInputProps) => {
     } = props;
     return (
         <Flex gap={2} align={'flex-end'}>
-            <div style={{ flexGrow: '1', }}>
-                {renderDefault({
-                    ...props,
-                    members: [members[0]],
-                })}
-            </div>
+            <Box flex={1}>
+                <div className='makana-hours-input' /* see ./style.css */ >
+                    {renderDefault({
+                        ...props,
+                        members: [members[0]],
+                    })}
+                </div>
+            </Box>
             <Box paddingY={3} style={{ paddingRight: '1px', }}>
                 <Label size={4} weight={'regular'} align={'center'}>
                     {TIME_SEPARATOR}
                 </Label>
             </Box>
-            <div style={{ flexGrow: '1', }}>
+            <Box flex={1}>
                 {props.renderDefault({
                     ...props,
                     members: [members[1]],
                 })}
-            </div>
+            </Box>
         </Flex>
     );
 };

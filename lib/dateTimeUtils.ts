@@ -26,6 +26,8 @@ export const renderIsoDate = (date: string, {
 
 const TIME_ZONES = getTimeZones();
 
+export const DEFAULT_TIME_ZONE = 'Asia/Amman';
+
 const formatGmtOffset = (offsetInMinutes: number) => {
     const offsetHours = Math.floor(offsetInMinutes / 60);
     const offsetMinutes = Math.abs(offsetInMinutes % 60);

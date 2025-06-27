@@ -45,7 +45,7 @@ export const createLink = (
             defineField({
                 name: 'internalTarget',
                 type: 'reference',
-                title: 'Internal Target',
+                title: 'Page',
                 description: descriptions.linkInternalTarget(),
                 to: Array.from(targetableSchemaTypeNames).map((schemaTypeName) => {
                     return {
@@ -60,7 +60,7 @@ export const createLink = (
             defineField({
                 name: 'externalTarget',
                 type: 'url',
-                title: 'External Target',
+                title: 'URL',
                 description: descriptions.linkExternalTarget(),
                 hidden: ({ parent }) => parent.type !== 'external',
                 validation: (Rule) => Rule.uri({
