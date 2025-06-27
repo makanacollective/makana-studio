@@ -147,8 +147,6 @@ export type AuxiliaryPortableText = Array<{
   _key: string
 }>
 
-export type AuxiliaryPortableTextBlock = AuxiliaryPortableText[number]
-
 export type LocalisedSlug = {
   _type: 'localisedSlug'
   ar?: Slug
