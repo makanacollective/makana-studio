@@ -96,30 +96,6 @@ export default defineType({
                             },
                         }),
                         defineField({
-                            name: 'name',
-                            type: 'string',
-                            title: 'Name',
-                            description: descriptions.formFieldName(),
-                            validation: (Rule) => Rule.custom((value = '', context) => {
-                                if (!value) { return true; }
-                                const issues: string[] = [];
-                                if (value && !/^[\w.\[\]-]+$/i.test(value)) {
-                                    issues.push('Use only letters, numbers, underscores, hyphens, periods, and square brackets');
-                                }
-                                const fields = Array.isArray((context.document as any)?.fields)
-                                    ? ((context.document as any).fields as Array<{ name: string }>)
-                                    : [];
-                                const duplicateCount = fields.filter((field) => field.name === value).length;
-                                if (duplicateCount > 1) {
-                                    issues.push('Field name is already in use');
-                                }
-                                return issues.length > 0 ? `${issues.join('. ')}${issues.length > 1 ? '.' : ''}` : true;
-                            }),
-                            components: {
-                                input: MonospaceStringInput,
-                            },
-                        }),
-                        defineField({
                             name: 'label',
                             type: 'localisedString',
                             title: 'Label',
@@ -140,6 +116,43 @@ export default defineType({
                                     },
                                 }),
                             ],
+                        }),
+                        defineField({
+                            name: 'name',
+                            type: 'string',
+                            title: 'Name',
+                            description: descriptions.formFieldName(),
+                            hidden: ({ parent }) => !(parent?.type === 'hidden'),
+                            validation: (Rule) => [
+                                Rule.custom((value = '', context) => {
+                                    const parent = context.parent as Record<string, any> | undefined;
+                                    if (!value && parent?.type === 'hidden') {
+                                        return 'A name is required for this field';
+                                    }
+                                    return true;
+                                }).warning(),
+                                Rule.custom((value = '', context) => {
+                                    if (!value) return true;
+                                    const document = context.document as Record<string, any> | undefined;
+                                    const parent = context.parent as Record<string, any> | undefined;
+                                    const issues: string[] = [];
+                                    const validPattern = /^[\w.\[\]-]+$/i;
+                                    if (!validPattern.test(value)) {
+                                        issues.push('Use only letters, numbers, underscores, hyphens, periods, and square brackets');
+                                    }
+                                    const fields = Array.isArray(document?.fields) ? document.fields : [];
+                                    const duplicateCount = fields.reduce((count: number, field: { name: string; type: string }) => {
+                                        return count + (field.type === parent?.type && field.name === value ? 1 : 0);
+                                    }, 0);
+                                    if (duplicateCount > 1) {
+                                        issues.push('Field name is already in use');
+                                    }
+                                    return issues.length > 0 ? `${issues.join('. ')}${issues.length > 1 ? '.' : ''}` : true;
+                                }).error()
+                            ],
+                            components: {
+                                input: MonospaceStringInput,
+                            },
                         }),
                         defineField({
                             name: 'value',
@@ -188,6 +201,12 @@ export default defineType({
                     components: {
                         input: FormAttributesInput,
                     },
+                    validation: (Rule) => Rule.custom((value) => { // TODO
+                        if (!value) return true;
+                        const parsed = JSON.parse(value ?? '{}');
+                        if (!parsed) return true;
+                        return !parsed.key && parsed.value && parsed.value.trim() ? 'Each value must have a key' : true;
+                    }).warning(),
                 }),
             ],
             components: {

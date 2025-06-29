@@ -26,9 +26,9 @@ export const descriptions = {
         formFields:                     () => `The set of fields that make up this form.`,
         formAttributes:                 () => `Additional HTML attributes to apply to this form.`,
         formFieldType:                  () => `The type of input used for this field.`,
-        formFieldName:                  () => `The name used to identify this field when the form is submitted. Without a name, this field's data will not be included in the submission.`,
         formFieldLabel:                 () => `The visible label shown for this field.`,
         formFieldOptions:               () => `The list of selectable options available for this field.`,
+        formFieldName:                  () => `The unique identifier for this field.`,
         formFieldValue:                 () => `The predefined value for this field.`,
         // link
         linkType:                       () => `Specifies whether this link points to an internal page or to an external one.`,
