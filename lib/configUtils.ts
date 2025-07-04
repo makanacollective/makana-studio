@@ -1,12 +1,6 @@
-import { Divider, ListItem, ListItemBuilder, MenuItem, MenuItemBuilder, StructureBuilder } from 'sanity/structure';
-import { LANGUAGE_FIELD_NAME, SUPPORTED_LANGUAGES } from './languageUtils';
+import { MenuItem, MenuItemBuilder, StructureBuilder } from 'sanity/structure';
 import { FC, SVGProps } from 'react';
 import { SortOrderingItem } from 'sanity';
-
-export const localisedSchemaTypeNames = new Set([
-    'project',
-    'writing',
-]);
 
 export const singletonSchemaTypeNames = new Set([
     'aboutPage',
@@ -64,65 +58,6 @@ export const documentList = (
                 || [{ field: '_id', direction: 'asc', }]
             )
     );
-};
-
-export const localisedDocumentList = (
-    S: StructureBuilder,
-    options: DocumentListOptions & {
-        before?: (ListItemBuilder | ListItem | Divider | any)[];
-        after?: (ListItemBuilder | ListItem | Divider | any)[];
-    },
-) => {
-    const {
-        schemaTypeName,
-        title,
-        id,
-        icon,
-        defaultOrdering,
-        before = [],
-        after = [],
-    } = options;
-    let baseListItem = S.listItem().title(title).id(id);
-    if (icon) { baseListItem = baseListItem.icon(icon); }
-    const languageItems = SUPPORTED_LANGUAGES.map((lang) => {
-        return S.listItem()
-            .title(`${title} (${lang.title})`)
-            .id(lang.id)
-            .child(
-                S.documentTypeList(schemaTypeName)
-                    .title(`${title} (${lang.title})`)
-                    .filter(`_type == '${schemaTypeName}' && ${LANGUAGE_FIELD_NAME} == '${lang.id}'`)
-                    .apiVersion('2025-05-15')
-                    .menuItems(filterMenuItems(S.documentTypeList(schemaTypeName).getMenuItems()))
-                    .defaultOrdering(
-                        defaultOrdering
-                        || S.documentTypeList(schemaTypeName).getDefaultOrdering()
-                        || [{ direction: 'asc', field: '_id', }]
-                    )
-                    .initialValueTemplates([
-                        S.initialValueTemplateItem(`${schemaTypeName}-by-language`, { langId: lang.id })
-                    ])
-            );
-    });
-    const translationsItem = S.listItem()
-        .title('Translation Groups')
-        .id('translationGroups')
-        .child(
-            S.documentTypeList('translationGroup')
-                .title(`Translation Groups`)
-                .filter(`_type == 'translationGroup' && type == '${schemaTypeName}'`)
-                .apiVersion('2025-05-15')
-                .defaultOrdering([
-                    {
-                        field: '_createdAt',
-                        direction: 'desc',
-                    },
-                ])
-                .initialValueTemplates([
-                    S.initialValueTemplateItem(`translation-group-by-type`, { schemaTypeName: schemaTypeName })
-                ])
-        );
-    return baseListItem.child(S.list().title(title).items([...before, ...languageItems, translationsItem, ...after]));
 };
 
 export const singletonDocument = (

@@ -13,24 +13,23 @@ export default defineType({
     title: 'About Page',
     icon: ABOUT_PAGE_ICON,
     fields: [
-        // TODO add note about language
         defineField({
             name: 'title',
             type: 'localisedString',
             title: 'Title',
-            description: descriptions.title(false, 'page'),
+            description: descriptions.title('page'),
         }),
         createLocalisedSlug({
             name: 'slug',
             title: 'Slug',
-            description: descriptions.slug(false, 'page'),
+            description: descriptions.slug('page'),
             sourceBase: 'title',
         }),
         defineField({
             name: 'content',
             type: 'object',
             title: 'Content',
-            description: descriptions.content(false, 'page'),
+            description: descriptions.content('page'),
             fields: SUPPORTED_LANGUAGES.map((lang) => {
                 return createPageBuilder({
                     name: lang.id,

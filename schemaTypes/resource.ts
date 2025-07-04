@@ -27,17 +27,16 @@ export default defineType({
     description: descriptions.document('all language versions of a resource page'),
     icon: RESOURCE_ICON,
     fields: [
-        // TODO add note about language
         defineField({
             name: 'title',
             type: 'localisedString',
             title: 'Title',
-            description: descriptions.title(false, 'resource'),
+            description: descriptions.title('resource'),
         }),
         createLocalisedSlug({
             name: 'slug',
             title: 'Slug',
-            description: descriptions.slug(false, 'resource'),
+            description: descriptions.slug('resource'),
             sourceBase: 'title',
         }),
         defineField({
@@ -53,7 +52,7 @@ export default defineType({
             name: 'summary',
             type: 'localisedText',
             title: 'Summary',
-            description: descriptions.summary(false, 'resource'),
+            description: descriptions.summary('resource'),
         }),
         defineField({
             name: 'mainImage',
@@ -71,7 +70,7 @@ export default defineType({
             name: 'content',
             type: 'object',
             title: 'Content',
-            description: descriptions.content(false, 'resource'),
+            description: descriptions.content('resource'),
             fields: SUPPORTED_LANGUAGES.map((lang) => {
                 return createPageBuilder({
                     name: lang.id,
@@ -120,7 +119,7 @@ export default defineType({
             } = selection;
             return {
                 title: renderLocalisedString(title),
-                subtitle: renderIsoDate(date, { mode: 'yearAndMonth', withFallback: true }),
+                subtitle: renderIsoDate(date, { withFallback: true }),
                 description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,
             };

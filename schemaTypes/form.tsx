@@ -51,6 +51,8 @@ const formFieldTypes = [
     },
 ];
 
+// TODO validations
+
 export default defineType({
     name: 'form',
     type: 'document',
@@ -69,7 +71,7 @@ export default defineType({
             type: 'url',
             title: 'Endpoint',
             description: descriptions.formEndpoint(),
-            validation: (Rule) => Rule.required().warning('An endpoint is required for the form to function'),
+            validation: (Rule) => Rule.required().error('An endpoint is required for the form to function'),
             components: {
                 input: MonospaceStringInput,
             },

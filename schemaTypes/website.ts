@@ -15,13 +15,13 @@ export default defineType({
             name: 'title',
             type: 'localisedString',
             title: 'Website Title',
-            description: descriptions.title(false, 'website'),
+            description: descriptions.title('website'),
         }),
         defineField({
             name: 'summary',
             type: 'localisedText',
             title: 'Website Summary',
-            description: descriptions.summary(false, 'website'),
+            description: descriptions.summary('website'),
         }),
         defineField({
             name: 'keywords',

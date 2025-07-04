@@ -1,11 +1,9 @@
 import { BookIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
+import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 import { descriptions } from '../lib/descriptionUtils';
-import { FSI, LANGUAGE_FIELD_NAME, PDI } from '../lib/languageUtils';
-import { RTLCompatibleInput } from '../components/RTLCompatibleInput';
-import { customSlugify, validateSlug } from '../lib/slugUtils';
+import { createLocalisedSlug } from './localisedSlug';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateTimeUtils';
-import { TEXT_FIELD_ROWS } from '../lib/miscUtils';
 import { HOTSPOT_PREVIEWS } from '../lib/imageUtils';
 import { createPageBuilder } from './pageBuilder';
 
@@ -17,7 +15,7 @@ export const WRITING_DATE_ORDERING: SortOrderingItem[] = [
         direction: 'desc',
     },
     {
-        field: 'title',
+        field: `title.${DEFAULT_LANGUAGE?.id}`,
         direction: 'asc',
     },
 ];
@@ -26,38 +24,20 @@ export default defineType({
     name: 'writing',
     type: 'document',
     title: 'Writing',
-    description: descriptions.document('a single-language version of a writing, such as an article, essay, or other publication'),
+    description: descriptions.document('all language versions of a writing, such as an article, essay, or other publication'),
     icon: WRITING_ICON,
     fields: [
-        // TODO add note about language
-        defineField({
-            name: LANGUAGE_FIELD_NAME,
-            type: LANGUAGE_FIELD_NAME,
-        }),
-        // TODO signifiy whether translations for this document exist
         defineField({
             name: 'title',
-            type: 'string',
+            type: 'localisedString',
             title: 'Title',
-            description: descriptions.title(true, 'writing'),
-            components: {
-                input: RTLCompatibleInput,
-            },
-            options: {
-                // @ts-ignore
-                inputDirection: [LANGUAGE_FIELD_NAME],
-            },
+            description: descriptions.title('writing'),
         }),
-        defineField({
+        createLocalisedSlug({
             name: 'slug',
-            type: 'slug',
             title: 'Slug',
-            description: descriptions.slug(true, 'writing'),
-            validation: (Rule) => Rule.custom(validateSlug),
-            options: {
-                source: 'title',
-                slugify: customSlugify,
-            },
+            description: descriptions.slug('writing'),
+            sourceBase: 'title',
         }),
         defineField({
             name: 'date',
@@ -70,17 +50,9 @@ export default defineType({
         }),
         defineField({
             name: 'summary',
-            type: 'text',
+            type: 'localisedText',
             title: 'Summary',
-            rows: TEXT_FIELD_ROWS,
-            description: descriptions.summary(true, 'writing'),
-            components: {
-                input: RTLCompatibleInput,
-            },
-            options: {
-                // @ts-ignore
-                inputDirection: [LANGUAGE_FIELD_NAME],
-            },
+            description: descriptions.summary('writing'),
         }),
         defineField({
             name: 'mainImage',
@@ -94,11 +66,18 @@ export default defineType({
                 storeOriginalFilename: false,
             },
         }),
-        createPageBuilder({
+        defineField({
             name: 'content',
+            type: 'object',
             title: 'Content',
-            description: descriptions.content(true, 'writing'),
-            inputDirection: [LANGUAGE_FIELD_NAME],
+            description: descriptions.content('writing'),
+            fields: SUPPORTED_LANGUAGES.map((lang) => {
+                return createPageBuilder({
+                    name: lang.id,
+                    title: lang.title,
+                    inputDirection: lang.dir,
+                });
+            }),
         }),
     ],
     orderings: [
@@ -107,20 +86,22 @@ export default defineType({
             title: 'date',
             by: WRITING_DATE_ORDERING,
         },
-        {
-            name: 'titleAsc',
-            title: 'title',
-            by: [
-                {
-                    field: 'title',
-                    direction: 'asc',
-                },
-                {
-                    field: 'date',
-                    direction: 'desc',
-                },
-            ],
-        },
+        ...SUPPORTED_LANGUAGES.map((lang) => {
+            return {
+                name: `titleAsc_${lang.id}`,
+                title: `title (${lang.title})`,
+                by: [
+                    {
+                        field: `title.${lang.id}`,
+                        direction: 'asc',
+                    },
+                    {
+                        field: `date`,
+                        direction: 'desc',
+                    },
+                ] as SortOrderingItem[],
+            };
+        }),
     ],
     preview: {
         select: {
@@ -137,9 +118,9 @@ export default defineType({
                 mainImage,
             } = selection;
             return {
-                title: title ? `${FSI}${title}${PDI}` : undefined,
-                subtitle: renderIsoDate(date, { mode: 'full', withFallback: true }),
-                description: `${FSI}${summary || 'No summary'}${PDI}`,
+                title: renderLocalisedString(title),
+                subtitle: renderIsoDate(date, { withFallback: true }),
+                description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,
             };
         },

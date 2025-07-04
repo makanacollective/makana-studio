@@ -39,17 +39,16 @@ export default defineType({
         },
     ],
     fields: [
-        // TODO add note about language
         defineField({
             name: 'title',
             type: 'localisedString',
             title: 'Title',
-            description: descriptions.title(false, 'happening'),
+            description: descriptions.title('happening'),
         }),
         createLocalisedSlug({
             name: 'slug',
             title: 'Slug',
-            description: descriptions.slug(false, 'happening'),
+            description: descriptions.slug('happening'),
             sourceBase: 'title',
         }),
         defineField({
@@ -131,7 +130,7 @@ export default defineType({
             name: 'summary',
             type: 'localisedText',
             title: 'Summary',
-            description: descriptions.summary(false, 'happening'),
+            description: descriptions.summary('happening'),
         }),
         defineField({
             name: 'mainImage',
@@ -149,7 +148,7 @@ export default defineType({
             name: 'content',
             type: 'object',
             title: 'Content',
-            description: descriptions.content(false, 'happening'),
+            description: descriptions.content('happening'),
             fields: SUPPORTED_LANGUAGES.map((lang) => {
                 return createPageBuilder({
                     name: lang.id,

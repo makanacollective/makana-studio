@@ -14,8 +14,6 @@ export const SUPPORTED_LANGUAGES = [
 
 export const DEFAULT_LANGUAGE = SUPPORTED_LANGUAGES.find((lang) => lang.default);
 
-export const LANGUAGE_FIELD_NAME = 'language';
-
 export const FSI = '\u2068';
 
 export const PDI = '\u2069';

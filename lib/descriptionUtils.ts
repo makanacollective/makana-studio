@@ -5,19 +5,18 @@ const defaultName = 'document';
 export const descriptions = {
     // documents and singletons
     analytics:      () => `A tracking script used for website analytics, if applicable.`,
-    content:        (isMonolingual: boolean, name = defaultName) => `The body content of this ${name}.`,
+    content:        (name = defaultName) => `The body content of this ${name}.`,
     date:           (name = defaultName) => `The date associated with this ${name}, primarily used for sorting and display.`,
     document:       (nameWithArticle: string) => `A ${defaultName} representing ${nameWithArticle}.`,
     featuredItems:  () => `Pages to highlight as featured content.`,
     keywords:       (name = defaultName) => `Descriptive keywords for this ${name}, used for search engine optimisation. Type a keyword and press Enter to add it.`,
-    language:       () => `The language of this ${defaultName}, used for organisation and other key functions. This value cannot be changed once set.`,
     location:       (name = 'event') => `The venue or place where this ${name} takes place.`,
     logo:           () => `The logo used across this website. Required format: SVG.`,
     mainImage:      (name = defaultName, refersToWebsite = false) => `The main visual representation of this ${name}${refersToWebsite ? '' : ' on the website and'} in social media previews. ${refersToWebsite ? 'Recommended dimensions: 1200×630px (1.91:1 aspect ratio). Recommended format: PNG (non-transparent).' : `Use the crop/hotspot tool (found in the field's upper-right corner) to ensure the image works well across multiple aspect ratios.`}`,
-    slug:           (isMonolingual: boolean, name = defaultName) => `${isMonolingual ? 'A URL-friendly identifier' : 'URL-friendly identifiers'} used to generate a web page for this ${name}. Without a slug, this ${name} will not appear on the website. Changing ${isMonolingual ? 'the' : 'a'} slug after publication may break shared links.`,
+    slug:           (name = defaultName) => `URL-friendly identifiers used to generate web pages for this ${name}. Changing a slug after publishing a document may break shared links.`,
     startDateTime:  (name = 'event') => `The local date and time when this ${name} takes place, used for sorting, display, and generating a downloadable calendar entry. Required date format: ${DATE_FORMAT}. Required time format: HH:mm (24-hour time).`,
-    summary:        (isMonolingual: boolean, name = defaultName) => `${isMonolingual ? 'A brief text snippet that introduces' : 'Brief text snippets that introduce'} this ${name} in search engine results and social media previews.`,
-    title:          (isMonolingual: boolean, name = defaultName) => `The title of this ${name}, used in listings, previews, and webpage headers.`,
+    summary:        (name = defaultName) => `Brief text snippets that introduce this ${name} in search engine results and social media previews.`,
+    title:          (name = defaultName) => `The titles of this ${name}, used in listings, previews, and webpage headers.`,
     translations:   () => ``,
     // objects and modules
     // form
