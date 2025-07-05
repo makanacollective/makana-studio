@@ -24,10 +24,18 @@ export default defineConfig({
         structureTool({
             structure: (S) => {
                 return S.list().title('Content').items([
+                    // S.divider().title('Primary Documents'),
                     documentList(S, { schemaTypeName: 'project', title: 'Projects', id: 'projects', icon: PROJECT_ICON, defaultOrdering: PROJECT_DATE_ORDERING, }),
                     documentList(S, { schemaTypeName: 'writing', title: 'Writings', id: 'writings', icon: WRITING_ICON, defaultOrdering: WRITING_DATE_ORDERING, }),
                     documentList(S, { schemaTypeName: 'happening', title: 'Happenings', id: 'happenings', icon: HAPPENING_ICON, defaultOrdering: HAPPENING_DATE_ORDERING, }),
                     documentList(S, { schemaTypeName: 'resource', title: 'Resources', id: 'resources', icon: RESOURCE_ICON, defaultOrdering: RESOURCE_DATE_ORDERING, }),
+                    S.divider().title('Special Projects'),
+                    S.listItem()
+                        .title('Counter-Map of Amman')
+                        .id('counterMapOfAmman')
+                        .child(
+                            S.list().title('Counter-Map of Amman (Coming Soon)').items([])
+                        ),
                     S.divider().title('Supporting Documents'),
                     documentList(S, { schemaTypeName: 'form', title: 'Forms', id: 'forms', icon: FORM_ICON, defaultOrdering: FORM_REFERENCE_NAME_ORDERING, }),
                     S.divider().title('Website Configuration'),
@@ -47,15 +55,6 @@ export default defineConfig({
                             'website',
                         ].includes(id);
                     }),
-                    // after: [
-                    //     S.divider().title('Special Projects'),
-                    //     S.listItem()
-                    //         .title('Counter-Map of Amman')
-                    //         .id('counterMapOfAmman')
-                    //         .child(
-                    //             S.list().title('Counter-Map of Amman (Coming Soon)').items([])
-                    //         )
-                    // ],
                 ]);
             },
         }),
