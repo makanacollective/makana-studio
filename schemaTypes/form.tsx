@@ -57,7 +57,7 @@ export default defineType({
     name: 'form',
     type: 'document',
     title: 'Form',
-    description: descriptions.document('all language versions of a form'),
+    description: descriptions.document('all localised versions of a form'),
     icon: FORM_ICON,
     fields: [
         defineField({
@@ -71,7 +71,7 @@ export default defineType({
             type: 'url',
             title: 'Endpoint',
             description: descriptions.formEndpoint(),
-            validation: (Rule) => Rule.required().error('An endpoint is required for the form to function'),
+            validation: (Rule) => Rule.required().error('A valid endpoint is required for the form to function'),
             components: {
                 input: MonospaceStringInput,
             },

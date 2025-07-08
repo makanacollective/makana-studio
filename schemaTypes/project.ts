@@ -24,7 +24,7 @@ export default defineType({
     name: 'project',
     type: 'document',
     title: 'Project',
-    description: descriptions.document('all language versions of a project page'),
+    description: descriptions.document('all localised versions of a project'),
     icon: PROJECT_ICON,
     fields: [
         defineField({

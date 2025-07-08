@@ -28,6 +28,7 @@ export const schemaTypes = new Set([
     // singletons
     aboutPage,
     homePage,
+    // specialProject_counterMap, TODO
     website,
     // objects
     link,

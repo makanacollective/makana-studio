@@ -118,3 +118,8 @@
 .makana-hours-input [data-ui='TextInput'] input {
     text-align: right;
 }
+
+/* remove 'create new' button from list panes */
+[data-ui='ListPane'] button#create-menu {
+    display: none;
+}

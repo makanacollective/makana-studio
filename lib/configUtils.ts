@@ -5,6 +5,7 @@ import { SortOrderingItem } from 'sanity';
 export const singletonSchemaTypeNames = new Set([
     'aboutPage',
     'homePage',
+    // 'specialProject_counterMap', TODO
     'website',
 ]);
 
@@ -62,19 +63,20 @@ export const documentList = (
 
 export const singletonDocument = (
     S: StructureBuilder,
-    options: Pick<DocumentListOptions, 'schemaTypeName' | 'title' | 'icon'>,
+    options: Omit<DocumentListOptions, 'defaultOrdering'>,
 ) => {
     const {
         schemaTypeName,
         title,
+        id,
         icon,
     } = options;
-    let baseListItem = S.listItem().title(title).id(schemaTypeName);
+    let baseListItem = S.listItem().title(title).id(id);
     if (icon) { baseListItem = baseListItem.icon(icon); }
     return baseListItem.child(
         S.document()
             .schemaType(schemaTypeName)
-            .documentId(schemaTypeName)
+            .documentId(id)
     );
 };
 

@@ -24,7 +24,7 @@ export default defineType({
     name: 'resource',
     type: 'document',
     title: 'Resource',
-    description: descriptions.document('all language versions of a resource page'),
+    description: descriptions.document('all localised versions of a resource'),
     icon: RESOURCE_ICON,
     fields: [
         defineField({

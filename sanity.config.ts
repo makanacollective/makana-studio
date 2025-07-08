@@ -24,7 +24,6 @@ export default defineConfig({
         structureTool({
             structure: (S) => {
                 return S.list().title('Content').items([
-                    // S.divider().title('Primary Documents'),
                     documentList(S, { schemaTypeName: 'project', title: 'Projects', id: 'projects', icon: PROJECT_ICON, defaultOrdering: PROJECT_DATE_ORDERING, }),
                     documentList(S, { schemaTypeName: 'writing', title: 'Writings', id: 'writings', icon: WRITING_ICON, defaultOrdering: WRITING_DATE_ORDERING, }),
                     documentList(S, { schemaTypeName: 'happening', title: 'Happenings', id: 'happenings', icon: HAPPENING_ICON, defaultOrdering: HAPPENING_DATE_ORDERING, }),
@@ -34,14 +33,16 @@ export default defineConfig({
                         .title('Counter-Map of Amman')
                         .id('counterMapOfAmman')
                         .child(
-                            S.list().title('Counter-Map of Amman (Coming Soon)').items([])
+                            S.list().title('Counter-Map of Amman (Coming Soon)').items([
+                                // TODO
+                            ])
                         ),
                     S.divider().title('Supporting Documents'),
                     documentList(S, { schemaTypeName: 'form', title: 'Forms', id: 'forms', icon: FORM_ICON, defaultOrdering: FORM_REFERENCE_NAME_ORDERING, }),
                     S.divider().title('Website Configuration'),
-                    singletonDocument(S, { schemaTypeName: 'homePage', title: 'Homepage', icon: HOME_PAGE_ICON, }),
-                    singletonDocument(S, { schemaTypeName: 'aboutPage', title: 'About Page', icon: ABOUT_PAGE_ICON, }),
-                    singletonDocument(S, { schemaTypeName: 'website', title: 'Website Settings', icon: WEBSITE_ICON, }),
+                    singletonDocument(S, { schemaTypeName: 'homePage', title: 'Homepage', id: 'homePage', icon: HOME_PAGE_ICON, }),
+                    singletonDocument(S, { schemaTypeName: 'aboutPage', title: 'About Page', id: 'aboutPage', icon: ABOUT_PAGE_ICON, }),
+                    singletonDocument(S, { schemaTypeName: 'website', title: 'Website Settings', id: 'website', icon: WEBSITE_ICON, }),
                     ...S.documentTypeListItems().filter((listItem) => {
                         const id = listItem.getId();
                         return typeof id === 'string' && ![
@@ -49,6 +50,7 @@ export default defineConfig({
                             'writing',
                             'happening',
                             'resource',
+                            // 'specialProject_counterMap', TODO
                             'form',
                             'homePage',
                             'aboutPage',
@@ -58,7 +60,7 @@ export default defineConfig({
                 ]);
             },
         }),
-        // media(),
+        // media(), TODO
         visionTool(),
     ],
     schema: {
@@ -75,7 +77,7 @@ export default defineConfig({
             enabled: false,
         },
     },
-    // form: {
+    // form: { TODO
 	// 	image: {
 	// 		assetSources: previousAssetSources => {
 	// 			return previousAssetSources.filter((assetSource) => assetSource === mediaAssetSource);

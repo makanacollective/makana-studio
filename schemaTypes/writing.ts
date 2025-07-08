@@ -24,7 +24,7 @@ export default defineType({
     name: 'writing',
     type: 'document',
     title: 'Writing',
-    description: descriptions.document('all language versions of a writing, such as an article, essay, or other publication'),
+    description: descriptions.document('all localised versions of a written work, such as an article, essay, or other publication'),
     icon: WRITING_ICON,
     fields: [
         defineField({

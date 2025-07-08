@@ -26,7 +26,7 @@ export default defineType({
     name: 'happening',
     type: 'document',
     title: 'Happening',
-    description: descriptions.document('all language versions of a happening, such as an event or programme'),
+    description: descriptions.document('all localised versions of a happening, such as an event or programme'),
     icon: HAPPENING_ICON,
     fieldsets: [
         {
