@@ -71,7 +71,7 @@ export default defineConfig({
                             name: 'fascinating-semifreddo-0284e3 ',
                             title: 'fascinating-semifreddo-0284e3.netlify.app ',
                             apiId: 'c48baa12-1ea7-48e6-82f8-7a21d6b27a3b',
-                            buildHookId: 'https://api.netlify.com/build_hooks/6896f9b1f8ae5733dca91f97',
+                            buildHookId: '6896f9b1f8ae5733dca91f97',
                             url: 'https://fascinating-semifreddo-0284e3.netlify.app',
                         },
                     ],
