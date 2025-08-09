@@ -10,9 +10,11 @@ import { FORM_ICON, FORM_REFERENCE_NAME_ORDERING } from './schemaTypes/form';
 import { HOME_PAGE_ICON } from './schemaTypes/homePage';
 import { ABOUT_PAGE_ICON } from './schemaTypes/aboutPage';
 import { WEBSITE_ICON } from './schemaTypes/website';
+import { dashboardTool } from '@sanity/dashboard';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 import './style.css';
+import { netlifyWidget } from 'sanity-plugin-dashboard-widget-netlify';
 
 export default defineConfig({
     name: 'default',
@@ -59,6 +61,22 @@ export default defineConfig({
                     }),
                 ]);
             },
+        }),
+        dashboardTool({
+            widgets: [
+                netlifyWidget({
+                    title: 'Netlify Deployments',
+                    sites: [
+                        {
+                            name: 'fascinating-semifreddo-0284e3 ',
+                            title: 'fascinating-semifreddo-0284e3.netlify.app ',
+                            apiId: 'c48baa12-1ea7-48e6-82f8-7a21d6b27a3b',
+                            buildHookId: 'https://api.netlify.com/build_hooks/6896f9b1f8ae5733dca91f97',
+                            url: 'https://fascinating-semifreddo-0284e3.netlify.app',
+                        },
+                    ],
+                }),
+            ],
         }),
         // media(), TODO
         visionTool(),

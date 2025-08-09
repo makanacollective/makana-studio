@@ -116,6 +116,10 @@ export default defineType({
                 field: FullGridSpanField,
             },
             options: {
+                // TODO:
+                // Consider using dynamic timezone offsets in the list `title`.
+                // It currently displays the current timezone offset, which
+                // may not be accurate for future or historic dates.
                 list: formattedTimeZones,
                 layout: 'dropdown',
             },

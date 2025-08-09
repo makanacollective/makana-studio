@@ -20,7 +20,7 @@ export const descriptions = {
     translations:   () => ``,
     // objects and modules
     // form
-        formReferenceName:  () => `A name used to identify this form internally. Will not be shown on the website.`,
+        formReferenceName:              () => `A name used to identify this form internally in Sanity Studio. Will not be shown on the website or anywhere else.`,
         formEndpoint:                   () => `The URL where this form should be submitted. Without a valid endpoint, submissions will not be received.`,
         formFields:                     () => `The set of fields that make up this form.`,
         formAttributes:                 () => `Additional HTML attributes to apply to this form.`,

@@ -39,7 +39,7 @@ const formatGmtOffset = (offsetInMinutes: number) => {
 export const formattedTimeZones = TIME_ZONES
     .map((tz) => {
         const gmtOffset = formatGmtOffset(tz.currentTimeOffsetInMinutes);
-        const title = `(${gmtOffset}) ${tz.name}`;
+        const title = `(${gmtOffset} now) ${tz.name}`;
         return {
             title: title,
             value: tz.name,

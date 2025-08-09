@@ -51,8 +51,6 @@ const formFieldTypes = [
     },
 ];
 
-// TODO validations
-
 export default defineType({
     name: 'form',
     type: 'document',
@@ -103,6 +101,8 @@ export default defineType({
                             title: 'Label',
                             description: descriptions.formFieldLabel(),
                             hidden: ({ parent }) => parent.type === 'hidden',
+                            // TODO prevent names like Field 1 or any variatios thereof
+                            // TODO ensure uniqueness across this field and the `name` field
                         }),
                         defineField({
                             name: 'options',
@@ -116,6 +116,8 @@ export default defineType({
                                     components: {
                                         input: FormFieldOptionInput,
                                     },
+                                    // TODO prevent names like Option 1 or any variations thereof
+                                    // TODO ensure uniqueness across field
                                 }),
                             ],
                         }),
@@ -203,11 +205,11 @@ export default defineType({
                     components: {
                         input: FormAttributesInput,
                     },
-                    validation: (Rule) => Rule.custom((value) => { // TODO
+                    validation: (Rule) => Rule.custom((value) => {
                         if (!value) return true;
                         const parsed = JSON.parse(value ?? '{}');
                         if (!parsed) return true;
-                        return !parsed.key && parsed.value && parsed.value.trim() ? 'Each value must have a key' : true;
+                        return (!parsed.key || !parsed.key?.trim()) && parsed.value && parsed.value.trim() ? 'Each value must have a key' : true;
                     }).warning(),
                 }),
             ],
