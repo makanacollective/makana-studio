@@ -7,6 +7,8 @@ import writing from './writing';
 // singletons
 import aboutPage from './aboutPage';
 import homePage from './homePage';
+import specialProject_counterMap from './specialProject_counterMap';
+import specialProject_counterMap_initiative from './specialProject_counterMap_initiative';
 import website from './website';
 // objects
 import link from './link';
@@ -28,7 +30,8 @@ export const schemaTypes = new Set([
     // singletons
     aboutPage,
     homePage,
-    // specialProject_counterMap, TODO
+    specialProject_counterMap,
+    specialProject_counterMap_initiative,
     website,
     // objects
     link,

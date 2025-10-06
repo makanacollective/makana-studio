@@ -16,13 +16,15 @@
   ],
   "dependencies": {
     "@sanity/dashboard": "^4.1.4",
-    "@sanity/vision": "^4.3.0",
+    "@sanity/vision": "^4.6.1",
     "@vvo/tzdb": "^6.174.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^19.1.0",
-    "sanity": "^4.3.0",
+    "sanity": "^4.10.2",
     "sanity-plugin-dashboard-widget-netlify": "^2.0.2",
+    "sanity-plugin-hotspot-array": "^3.0.1",
+    "sanity-plugin-media": "^4.0.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {

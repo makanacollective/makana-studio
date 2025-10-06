@@ -5,8 +5,9 @@ import { SortOrderingItem } from 'sanity';
 export const singletonSchemaTypeNames = new Set([
     'aboutPage',
     'homePage',
-    // 'specialProject_counterMap', TODO
+    'specialProject_counterMap',
     'website',
+    'media.tag',
 ]);
 
 export const targetableSchemaTypeNames = new Set([
@@ -14,6 +15,8 @@ export const targetableSchemaTypeNames = new Set([
     'project',
     'resource',
     'writing',
+    'specialProject_counterMap',
+    'specialProject_counterMap_initiative',
 ]);
 
 const filterMenuItems = (menuItems?: (MenuItem | MenuItemBuilder)[]) => {

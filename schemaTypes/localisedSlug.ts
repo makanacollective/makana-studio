@@ -9,6 +9,7 @@ export const createLocalisedSlug = (
         title?: string;
         description?: string;
         sourceBase?: string;
+        group?: string;
     } = {}
 ): any => {
     const {
@@ -17,6 +18,7 @@ export const createLocalisedSlug = (
         title = 'Localised Slug',
         description,
         sourceBase,
+        group,
     } = options;
     const definition = {
         name: name,
@@ -38,6 +40,7 @@ export const createLocalisedSlug = (
         options: {
             columns: SUPPORTED_LANGUAGES.length > 1 ? 2 : 1,
         },
+        group: group || undefined,
     };
     return as === 'type' ? defineType(definition) : defineField(definition);
 };

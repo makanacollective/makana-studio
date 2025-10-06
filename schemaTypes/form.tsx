@@ -7,7 +7,7 @@ import { MonospaceStringInput } from '../components/MonospaceStringInput';
 import { FormFieldOptionInput } from '../components/FormFieldOptionInput';
 import { FormAttributesInput } from '../components/FormAttributesInput';
 import { FormAttributesField } from '../components/FormAttributesField';
-import { FSI, PDI, renderLocalisedString } from '../lib/languageUtils';
+import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString } from '../lib/languageUtils';
 
 export const FORM_ICON = BillIcon;
 
@@ -50,6 +50,10 @@ const formFieldTypes = [
         icon: EyeOpenIcon,
     },
 ];
+
+const normaliseLabel = (value?: string): string => {
+    return (value || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+};
 
 export default defineType({
     name: 'form',
@@ -101,8 +105,18 @@ export default defineType({
                             title: 'Label',
                             description: descriptions.formFieldLabel(),
                             hidden: ({ parent }) => parent.type === 'hidden',
-                            // TODO prevent names like Field 1 or any variatios thereof
-                            // TODO ensure uniqueness across this field and the `name` field
+                            validation: (Rule) => Rule.custom((value: Record<string, string>) => {
+                                const defaultLanguageId = DEFAULT_LANGUAGE?.id;
+                                const defaultLanguageName = DEFAULT_LANGUAGE?.title;
+                                if (!value || !defaultLanguageId || !defaultLanguageName) return true;
+                                const currentLabel = value[defaultLanguageId];
+                                if (!currentLabel) return true;
+                                const normalisedLabel = normaliseLabel(currentLabel);
+                                if (/^field\s*\d+$/i.test(normalisedLabel)) {
+                                    return `Avoid generic ${defaultLanguageName} labels like 'field 1', 'field2', etc., as they can cause issues with form handling`;
+                                }
+                                return true;
+                            }),
                         }),
                         defineField({
                             name: 'options',
@@ -117,7 +131,7 @@ export default defineType({
                                         input: FormFieldOptionInput,
                                     },
                                     // TODO prevent names like Option 1 or any variations thereof
-                                    // TODO ensure uniqueness across field
+                                    // TODO ensure uniqueness
                                 }),
                             ],
                         }),
@@ -128,31 +142,22 @@ export default defineType({
                             description: descriptions.formFieldName(),
                             hidden: ({ parent }) => !(parent?.type === 'hidden'),
                             validation: (Rule) => [
-                                Rule.custom((value = '', context) => {
-                                    const parent = context.parent as Record<string, any> | undefined;
+                                Rule.custom((value, context) => {
+                                    const parent = context.parent as any | undefined;
                                     if (!value && parent?.type === 'hidden') {
                                         return 'A name is required for this field';
                                     }
                                     return true;
                                 }).warning(),
-                                Rule.custom((value = '', context) => {
-                                    if (!value) return true;
-                                    const document = context.document as Record<string, any> | undefined;
-                                    const parent = context.parent as Record<string, any> | undefined;
-                                    const issues: string[] = [];
+                                Rule.custom((value, context) => {
+                                    const parent = context.parent as any | undefined;
+                                    if (!value || parent.type !== 'hidden') return true;
                                     const validPattern = /^[\w.\[\]-]+$/i;
                                     if (!validPattern.test(value)) {
-                                        issues.push('Use only letters, numbers, underscores, hyphens, periods, and square brackets');
+                                        return 'Use only Latin letters, numbers, underscores, hyphens, periods, and square brackets';
                                     }
-                                    const fields = Array.isArray(document?.fields) ? document.fields : [];
-                                    const duplicateCount = fields.reduce((count: number, field: { name: string; type: string }) => {
-                                        return count + (field.type === parent?.type && field.name === value ? 1 : 0);
-                                    }, 0);
-                                    if (duplicateCount > 1) {
-                                        issues.push('Field name is already in use');
-                                    }
-                                    return issues.length > 0 ? `${issues.join('. ')}${issues.length > 1 ? '.' : ''}` : true;
-                                }).error()
+                                    return true;
+                                }).error(),
                             ],
                             components: {
                                 input: MonospaceStringInput,
@@ -193,6 +198,37 @@ export default defineType({
                     },
                 }),
             ],
+            validation: (Rule) => Rule.custom((fields: any[] = []) => {
+                const defaultLanguageId = DEFAULT_LANGUAGE?.id;
+                const defaultLanguageName = DEFAULT_LANGUAGE?.title;
+                if (!fields || !Array.isArray(fields) || !defaultLanguageId || !defaultLanguageName) return true;
+                const valueMap = new Map();
+                const duplicateIndexes = new Set<number>();
+                fields.forEach((field: any, index) => {
+                    let key = null;
+                    if (field.type === 'hidden' && field.name) {
+                        key = normaliseLabel(field.name);
+                    }
+                    if (field.type !== 'hidden' && field.label && field.label[defaultLanguageId]) {
+                        key = normaliseLabel(field.label[defaultLanguageId]);
+                    }
+                    if (key) {
+                        if (valueMap.has(key)) {
+                            duplicateIndexes.add(index);
+                            duplicateIndexes.add(valueMap.get(key));
+                        } else {
+                            valueMap.set(key, index);
+                        }
+                    }
+                });
+                if (duplicateIndexes.size > 0) {
+                    return {
+                        paths: [...duplicateIndexes].map((i) => [{ _key: fields[i]._key }]),
+                        message: `Some ${defaultLanguageName} field labels or names are duplicated`,
+                    };
+                }
+                return true;
+            }),
         }),
         defineField({
             name: 'attributes',

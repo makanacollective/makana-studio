@@ -6,12 +6,16 @@ import { PROJECT_ICON, PROJECT_DATE_ORDERING } from './schemaTypes/project';
 import { WRITING_ICON, WRITING_DATE_ORDERING } from './schemaTypes/writing';
 import { HAPPENING_ICON, HAPPENING_DATE_ORDERING } from './schemaTypes/happening';
 import { RESOURCE_ICON, RESOURCE_DATE_ORDERING } from './schemaTypes/resource';
+import { COUNTER_MAP_ICON } from './schemaTypes/specialProject_counterMap';
+import { COUNTER_MAP_INITIATIVE_ICON, INITIATIVE_DEFAULT_TITLE_ORDERING } from './schemaTypes/specialProject_counterMap_initiative';
 import { FORM_ICON, FORM_REFERENCE_NAME_ORDERING } from './schemaTypes/form';
 import { HOME_PAGE_ICON } from './schemaTypes/homePage';
 import { ABOUT_PAGE_ICON } from './schemaTypes/aboutPage';
 import { WEBSITE_ICON } from './schemaTypes/website';
 import { dashboardTool } from '@sanity/dashboard';
+import { media, mediaAssetSource } from 'sanity-plugin-media';
 import { visionTool } from '@sanity/vision';
+import { imageHotspotArrayPlugin } from 'sanity-plugin-hotspot-array';
 import { schemaTypes } from './schemaTypes';
 import './style.css';
 import { netlifyWidget } from 'sanity-plugin-dashboard-widget-netlify';
@@ -35,8 +39,9 @@ export default defineConfig({
                         .title('Counter-Map of Amman')
                         .id('counterMapOfAmman')
                         .child(
-                            S.list().title('Counter-Map of Amman (Coming Soon)').items([
-                                // TODO
+                            S.list().title('Counter-Map of Amman').items([
+                                singletonDocument(S, { schemaTypeName: 'specialProject_counterMap', title: 'Map', id: 'specialProject_counterMapOfAmman', icon: COUNTER_MAP_ICON, }),
+                                documentList(S, { schemaTypeName: 'specialProject_counterMap_initiative', title: 'Initiatives', id: 'initiatives', icon: COUNTER_MAP_INITIATIVE_ICON, defaultOrdering: INITIATIVE_DEFAULT_TITLE_ORDERING }),
                             ])
                         ),
                     S.divider().title('Supporting Documents'),
@@ -52,11 +57,13 @@ export default defineConfig({
                             'writing',
                             'happening',
                             'resource',
-                            // 'specialProject_counterMap', TODO
+                            'specialProject_counterMap',
+                            'specialProject_counterMap_initiative',
                             'form',
                             'homePage',
                             'aboutPage',
                             'website',
+                            'media.tag',
                         ].includes(id);
                     }),
                 ]);
@@ -78,8 +85,9 @@ export default defineConfig({
                 }),
             ],
         }),
-        // media(), TODO
+        media(),
         visionTool(),
+        imageHotspotArrayPlugin(),
     ],
     schema: {
         types: Array.from(schemaTypes),
@@ -95,13 +103,18 @@ export default defineConfig({
             enabled: false,
         },
     },
-    // form: { TODO
-	// 	image: {
-	// 		assetSources: previousAssetSources => {
-	// 			return previousAssetSources.filter((assetSource) => assetSource === mediaAssetSource);
-	// 		},
-	// 	},
-	// },
+    form: {
+        image: {
+            assetSources: (previousAssetSources) => {
+                return previousAssetSources.filter((assetSource) => assetSource !== mediaAssetSource);
+            },
+        },
+        file: {
+            assetSources: (previousAssetSources) => {
+                return previousAssetSources.filter((assetSource) => assetSource !== mediaAssetSource);
+            },
+        },
+    },
     tasks: {
         enabled: false,
     },
