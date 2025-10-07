@@ -29,6 +29,7 @@ export default defineType({
                     },
                 }),
             ],
+            validation: (Rule) => Rule.max(2),
         }),
     ],
     preview: {

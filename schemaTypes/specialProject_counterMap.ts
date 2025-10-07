@@ -196,7 +196,7 @@ export default defineType({
                             } = selection;
                             const initiativeRef = initiative?._ref;
                             return {
-                                title: initiativeRef ? (renderLocalisedString(initiativeTitle) || 'Untitled initiative') : 'No initiative',
+                                title: initiativeRef ? (renderLocalisedString(initiativeTitle) || 'Untitled initiative') : 'No initiative selected',
                                 subtitle: `x: ${x}%, y: ${y}%`,
                                 description: `${FSI}${renderLocalisedString(initiativeSummary, 50) || 'No summary'}${PDI}`,
                                 media: initiativeMainImage,
