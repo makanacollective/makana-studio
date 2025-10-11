@@ -75,11 +75,11 @@ export default defineConfig({
                     title: 'Netlify Deployments',
                     sites: [
                         {
-                            name: 'fascinating-semifreddo-0284e3 ',
-                            title: 'fascinating-semifreddo-0284e3.netlify.app ',
-                            apiId: 'c48baa12-1ea7-48e6-82f8-7a21d6b27a3b',
-                            buildHookId: '6896f9b1f8ae5733dca91f97',
-                            url: 'https://fascinating-semifreddo-0284e3.netlify.app',
+                            name: 'makanacollective ',
+                            title: 'makanacollective.org ',
+                            apiId: '3d308320-2c30-4a2e-92f1-5d9e4d0295b2',
+                            buildHookId: '68ea871ada1527dbff9655f5',
+                            url: 'https://makanacollective.org',
                         },
                     ],
                 }),
