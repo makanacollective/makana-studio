@@ -8,6 +8,7 @@ import { FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/lan
 import { createPageBuilder } from './pageBuilder';
 import { COUNTER_MAP_INITIATIVE_ICON } from './specialProject_counterMap_initiative';
 import { CounterMapMarkerTooltip } from '../components/CounterMapMarkerTooltip';
+import { ColourInput } from '../components/ColourInput';
 
 export const COUNTER_MAP_ICON = EarthGlobeIcon;
 
@@ -118,6 +119,23 @@ export default defineType({
             options: {
                 storeOriginalFilename: false,
                 accept: '.svg',
+            },
+            group: 'mapAndMarkers',
+        }),
+        defineField({
+            name: 'mapViewportBackgroundColour',
+            type: 'string',
+            title: 'Viewport Background Colour',
+            // description TODO
+            validation: (Rule) => Rule.custom((value?: string) => {
+                if (!value) { return true; };
+                const s = new Option().style;
+                s.color = value;
+                if (['', 'inherit', 'initial', 'transparent', 'unset'].includes(s.color)) { return 'Not a valid colour'; };
+                return true;
+            }).warning(),
+            components: {
+                input: ColourInput,
             },
             group: 'mapAndMarkers',
         }),
