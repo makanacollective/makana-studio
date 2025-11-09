@@ -40,10 +40,11 @@ export const descriptions = {
     pageBuilderAudioFile:           () => `An audio file to embed on the page.`,
     pageBuilderForm:                () => `A form to display on the page.`,
     // counter-map
-    submissionForm:         () => `The form used to collect submissions for this counter-map. Ensure that the form endpoint is correctly set up.`,
-    mapAsset:               () => `The base image used as the interactive asset for this counter-map. Required format: SVG.`,
-    mapMarkers:             () => `Markers that appear on the interactive map, each linked to a specific initiative. Coordinates are expressed as percentages relative to the image's dimensions.`,
-    mapMarkerX:             () => `The X-position of this marker. 0% corresponds to the map's left edge; 100% to its right.`,
-    mapMarkerY:             () => `The Y-position of this marker. 0% corresponds to the map's top edge; 100% to its bottom.`,
-    mapMarkerInitiative:    () => `The initiative associated with this marker.`,
+    submissionForm:                 () => `The form used to collect submissions for this counter-map. Ensure that the form endpoint is correctly set up.`,
+    mapAsset:                       () => `The base image used as the interactive asset for this counter-map. Required format: SVG.`,
+    mapViewportBackgroundColour:    () => `The background colour displayed behind the interactive map. Required format: hex (#ff0000), RGB (rgb(255, 0, 0)), RGBA (rgba(255, 0, 0, 0.5)), or HSL (hsl(0, 100%, 50%)). Also accepts named HTML colours (e.g., red, blue, gold).`,
+    mapMarkers:                     () => `Markers that appear on the interactive map, each linked to a specific initiative. Coordinates are expressed as percentages relative to the image's dimensions.`,
+    mapMarkerX:                     () => `The X-position of this marker. 0% corresponds to the map's left edge; 100% to its right.`,
+    mapMarkerY:                     () => `The Y-position of this marker. 0% corresponds to the map's top edge; 100% to its bottom.`,
+    mapMarkerInitiative:            () => `The initiative associated with this marker.`,
 };

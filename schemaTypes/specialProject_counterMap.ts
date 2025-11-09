@@ -126,14 +126,14 @@ export default defineType({
             name: 'mapViewportBackgroundColour',
             type: 'string',
             title: 'Viewport Background Colour',
-            // description TODO
+            description: descriptions.mapViewportBackgroundColour(),
             validation: (Rule) => Rule.custom((value?: string) => {
                 if (!value) { return true; };
                 const s = new Option().style;
                 s.color = value;
                 if (['', 'inherit', 'initial', 'transparent', 'unset'].includes(s.color)) { return 'Not a valid colour'; };
                 return true;
-            }).warning(),
+            }).error(),
             components: {
                 input: ColourInput,
             },
