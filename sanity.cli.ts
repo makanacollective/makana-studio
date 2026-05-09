@@ -10,4 +10,5 @@ export default defineCliConfig({
         autoUpdates: true,
     },
     studioHost: 'makana',
+    reactStrictMode: true,
 });

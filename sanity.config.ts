@@ -124,6 +124,9 @@ export default defineConfig({
     scheduledPublishing: {
         enabled: false,
     },
+    scheduledDrafts: {
+        enabled: false,
+    },
     announcements: {
         enabled: false,
     },
