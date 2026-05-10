@@ -12,7 +12,15 @@ export const SUPPORTED_LANGUAGES = [
     },
 ];
 
-export const DEFAULT_LANGUAGE = SUPPORTED_LANGUAGES.find((lang) => lang.default);
+let cachedDefaultLanguage = undefined;
+
+export const DEFAULT_LANGUAGE = (() => {
+    if (cachedDefaultLanguage) return cachedDefaultLanguage;
+    const entry = SUPPORTED_LANGUAGES.find((lang) => lang.default);
+    if (!entry) throw new Error('No default language defined in SUPPORTED_LANGUAGES');
+    cachedDefaultLanguage = entry;
+    return cachedDefaultLanguage;
+})();
 
 export const FSI = '\u2068';
 
