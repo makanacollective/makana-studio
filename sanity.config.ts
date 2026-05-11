@@ -22,7 +22,7 @@ import { netlifyWidget } from 'sanity-plugin-dashboard-widget-netlify';
 
 export default defineConfig({
     name: 'default',
-    title: 'Makāna',
+    title: 'makāna',
     projectId: '33wg2r17',
     dataset: 'production',
     icon: MakanaLogo,
@@ -112,6 +112,19 @@ export default defineConfig({
         file: {
             assetSources: (previousAssetSources) => {
                 return previousAssetSources.filter((assetSource) => assetSource !== mediaAssetSource);
+            },
+        },
+        portableText: {
+            plugins: (props: any) => {
+                return props.renderDefault({
+                    ...props,
+                    plugins: {
+                        ...props.plugins,
+                        typography: {
+                            enabled: true,
+                        },
+                    },
+                });
             },
         },
     },

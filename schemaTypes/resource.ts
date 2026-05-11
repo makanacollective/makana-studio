@@ -1,6 +1,6 @@
 import { PlugIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
-import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
+import { DEFAULT_LANGUAGE, filterLocalisedStringByLangId, FSI, PDI, renderLocalisedString, SUPPORTED_LANGUAGES } from '../lib/languageUtils';
 import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
 import { DATE_FORMAT, renderIsoDate } from '../lib/dateTimeUtils';
@@ -110,15 +110,20 @@ export default defineType({
             summary: 'summary',
             mainImage: 'mainImage',
         },
-        prepare(selection) {
+        prepare(selection, viewOptions) {
             const {
                 title,
                 date,
                 summary,
                 mainImage,
             } = selection;
+            const primaryOrdering = viewOptions?.ordering?.by[0]?.field;
+            const isSortedByTitle = primaryOrdering?.startsWith('title');
+            const langIdUsedForSorting = isSortedByTitle ? primaryOrdering?.replace('title.' , '') : undefined;
             return {
-                title: renderLocalisedString(title),
+                title: isSortedByTitle
+                    ? renderLocalisedString(filterLocalisedStringByLangId(title, langIdUsedForSorting))
+                    : renderLocalisedString(title),
                 subtitle: renderIsoDate(date, { withFallback: true }),
                 description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,

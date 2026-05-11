@@ -1,6 +1,6 @@
 import { CalendarIcon } from '@sanity/icons';
 import { defineField, defineType, SortOrderingItem } from 'sanity';
-import { DEFAULT_LANGUAGE, FSI, PDI, renderLocalisedString, SEPARATOR, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
+import { DEFAULT_LANGUAGE, filterLocalisedStringByLangId, FSI, PDI, renderLocalisedString, SEPARATOR, SUPPORTED_LANGUAGES, } from '../lib/languageUtils';
 import { descriptions } from '../lib/descriptionUtils';
 import { createLocalisedSlug } from './localisedSlug';
 import { DATE_FORMAT, DEFAULT_TIME_ZONE, formattedTimeZones, renderIsoDate, TIME_SEPARATOR } from '../lib/dateTimeUtils';
@@ -194,7 +194,7 @@ export default defineType({
             summary: 'summary',
             mainImage: 'mainImage',
         },
-        prepare(selection) {
+        prepare(selection, viewOptions) {
             const {
                 title,
                 startDate,
@@ -203,11 +203,16 @@ export default defineType({
                 summary,
                 mainImage,
             } = selection;
+            const primaryOrdering = viewOptions?.ordering?.by[0]?.field;
+            const isSortedByTitle = primaryOrdering?.startsWith('title');
+            const langIdUsedForSorting = isSortedByTitle ? primaryOrdering?.replace('title.' , '') : undefined;
             const renderedDate = renderIsoDate(startDate, { mode: 'full', withFallback: true });
             const renderedTime = startTime && startTime.hours ? `${startTime.hours}${TIME_SEPARATOR}${startTime.minutes || '00'}` : undefined;
             const renderedLocation = renderLocalisedString(location);
             return {
-                title: renderLocalisedString(title),
+                title: isSortedByTitle
+                    ? renderLocalisedString(filterLocalisedStringByLangId(title, langIdUsedForSorting))
+                    : renderLocalisedString(title),
                 subtitle: [renderedDate, renderedTime, renderedLocation].filter(Boolean)?.join(SEPARATOR),
                 description: `${FSI}${renderLocalisedString(summary, 50) || 'No summary'}${PDI}`,
                 media: mainImage,

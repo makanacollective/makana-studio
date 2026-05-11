@@ -40,3 +40,15 @@ export const renderLocalisedString = (
         })
         ?.join(SEPARATOR) || undefined;
 };
+
+export const filterLocalisedStringByLangId = (
+    localisedString: Record<string, string> | undefined,
+    langId: string | undefined,
+): Record<string, string> | undefined => {
+    if (!localisedString || !langId) {
+        return localisedString;
+    }
+    return localisedString[langId]
+        ? { [langId]: localisedString[langId] }
+        : localisedString;
+};
